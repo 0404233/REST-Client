@@ -1,10 +1,8 @@
 'use client';
 
 import ApiTable from '@/_components/api-table/ApiTable';
-import RequestHeaders from '@/_components/headers/Headers';
-import RequestBody from '@/_components/request-body/RequestBody';
-import ResponseTable from '@/_components/response/ResponseTable';
-import { getAllPosts, updatePost, deletePost } from 'app/_lib/fetch-data';
+import RequestPanel from '@/_components/request-panel/RequestPanel';
+import { getAllPosts, getPost, updatePost, deletePost } from 'app/_lib/fetch-data';
 import { useCallback, useState } from 'react';
 
 type Result = Record<string, any>;
@@ -29,11 +27,11 @@ const RestClient = () => {
   const [url, setURL] = useState<string>('https://jsonplaceholder.typicode.com/posts');
   const [method, setMethod] = useState<RequestMethod>('GET');
   const [headers, setHeaders] = useState<RequestHeader[]>([{ id: '1', key: '', value: '' }]);
-  // СДЕЛАТЬ headers изменить для функции
   // СДЕЛАТЬ BODY и изменить для функции
+  // СДЕЛАТЬ id
   // СДЕЛАТЬ Generated Code
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     let response;
 
     switch (method) {
@@ -69,7 +67,7 @@ const RestClient = () => {
       result,
       error: '',
     });
-  };
+  }, []);
 
   const handleChangeMethod = useCallback((value: RequestMethod) => {
     setMethod(value);
@@ -91,9 +89,7 @@ const RestClient = () => {
         handleChangeMethod={handleChangeMethod}
         handleChangeURL={handleChangeURL}
       />
-      <RequestHeaders handleChangeHeaders={handleChangeHeaders} />
-      <RequestBody />
-      <ResponseTable responseBody={responseBody} />
+      <RequestPanel handleChangeHeaders={handleChangeHeaders} responseBody={responseBody} />
     </div>
   );
 };

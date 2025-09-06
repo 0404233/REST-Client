@@ -7,9 +7,10 @@ type EndpointProps = {
 };
 
 const Endpoint = ({ handleChangeURL }: EndpointProps) => {
+  console.log('Endpoint');
   const [url, setURL] = useState<string>('https://jsonplaceholder.typicode.com/posts');
 
-  const hgandleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
     setURL(url);
     handleChangeURL(url);
@@ -23,7 +24,7 @@ const Endpoint = ({ handleChangeURL }: EndpointProps) => {
         placeholder="Enter endpoint"
         className="border-1 py-1 px-2 rounded-xs outline-none"
         value={url}
-        onChange={hgandleChange}
+        onChange={handleChange}
       />
     </div>
   );

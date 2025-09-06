@@ -7,6 +7,7 @@ type BodyProps = {
 };
 
 const Body = ({ result, error }: BodyProps) => {
+  console.log('Body');
   if (error) {
     return <div className="text-xl text-gray-500 p-2">No data available</div>;
   }

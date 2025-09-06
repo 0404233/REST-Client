@@ -1,19 +1,14 @@
+import { RequestHeader } from "app/[locale]/rest/page";
+import { convertHeaders } from "./convertHeaders";
+
 type FetchOptions = {
   url: string;
   body: Record<string, string>;
   method: string;
-  headers: Record<string, string>
+  headers: RequestHeader[]
   id?: string;
 }
 
-/*
-                              
-  headers: {
-    'Content-type': 'application/json; charset=UTF-8',
-  },
-}
-
-*/
 export const getAllPosts = async (url: string) => {
   try {
     const response = await fetch(url);
@@ -37,14 +32,17 @@ export const getPost = async (url: string) => {
 }
 
 export const updatePost = async (props: FetchOptions) => {
+  const { url, body, method, headers, id } = props;
+
+  const currentHeaders = convertHeaders(headers);
+
   try {
 
-    const { url, body, method, headers, id } = props;
 
     await fetch(url, {
       method: method,
       body: JSON.stringify(body),
-      headers: headers,
+      headers: currentHeaders,
     });
   } catch (error) {
     console.error(error)
@@ -63,3 +61,13 @@ export const deletePost = async (props: Pick<FetchOptions, 'url' | "method">) =>
   }
 }
 
+/* 
+  body: JSON.stringify({
+    title: 'foo',
+    body: 'bar',
+    userId: 1,
+  }),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8',
+  },
+*/

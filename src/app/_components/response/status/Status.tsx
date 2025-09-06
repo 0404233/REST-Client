@@ -4,12 +4,14 @@ type StatusProps = {
 };
 
 const Status = ({ status, ok }: StatusProps) => {
+  console.log('Status');
+
   if (!status) return null;
 
   return (
     <div>
-      <p>Status: {status}</p>
-      <p>
+      <p className="text-lg">Status: {status}</p>
+      <p className="text-lg">
         Code:
         {ok ? (
           <span className="text-green-500"> OK</span>

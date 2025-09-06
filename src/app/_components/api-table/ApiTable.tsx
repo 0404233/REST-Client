@@ -4,6 +4,7 @@ import { RequestMethod } from 'app/[locale]/rest/page';
 import Button from './button/Button';
 import Endpoint from './endpoint/Endpoint';
 import Method from './method/Method';
+import { memo } from 'react';
 
 type ApiTableProps = {
   handleSubmit: () => void;
@@ -12,6 +13,8 @@ type ApiTableProps = {
 };
 
 const ApiTable = ({ handleSubmit, handleChangeMethod, handleChangeURL }: ApiTableProps) => {
+  console.log('ApiTable');
+
   return (
     <div className="flex w-full">
       <Method setMethod={handleChangeMethod} />
@@ -21,4 +24,4 @@ const ApiTable = ({ handleSubmit, handleChangeMethod, handleChangeURL }: ApiTabl
   );
 };
 
-export default ApiTable;
+export default memo(ApiTable);

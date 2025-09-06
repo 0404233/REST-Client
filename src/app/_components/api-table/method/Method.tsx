@@ -1,7 +1,7 @@
 'use client';
 
 import { RequestMethod } from 'app/[locale]/rest/page';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, memo, useState } from 'react';
 
 const MethodColors = {
   GET: 'text-green-600',
@@ -16,6 +16,8 @@ type MethodProps = {
 };
 
 const Method = ({ setMethod }: MethodProps) => {
+  console.log('Method');
+
   const [selectedMethod, setSelectedMethod] = useState<keyof typeof MethodColors>('GET');
 
   const handleChangeColor = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -55,4 +57,4 @@ const Method = ({ setMethod }: MethodProps) => {
   );
 };
 
-export default Method;
+export default memo(Method);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import HeaderRow from './header-row/HeaderRow';
+
 import { RequestHeader } from 'app/[locale]/rest/page';
+import HeaderRow from './header-row/HeaderRow';
 
 export type Header = {
   id: string;
@@ -13,7 +14,11 @@ type HeadersTableProps = {
 };
 
 export const HeadersTable = ({ handleChangeHeaders }: HeadersTableProps) => {
-  const [headers, setHeaders] = useState<Header[]>([{ id: '1', key: '', value: '' }]);
+  console.log('HeadersTable');
+  const [headers, setHeaders] = useState<Header[]>([
+    { id: '1', key: 'Content-Type', value: 'application/json' },
+    { id: '2', key: 'Accept', value: 'Your-App-Name' },
+  ]);
 
   useEffect(() => {
     handleChangeHeaders(headers);
@@ -51,7 +56,11 @@ export const HeadersTable = ({ handleChangeHeaders }: HeadersTableProps) => {
         ))}
       </div>
 
-      <button type="button" onClick={addHeader} className="text-start cursor-pointer">
+      <button
+        type="button"
+        onClick={addHeader}
+        className="text-start cursor-pointer hover:text-emerald-600 transition"
+      >
         + Add header
       </button>
     </div>
