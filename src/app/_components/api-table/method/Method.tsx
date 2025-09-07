@@ -47,7 +47,7 @@ const Method = ({ setMethod }: MethodProps) => {
           PUT
         </option>
         <option value="PATCH" className="text-orange-500 bg-zinc-950 cursor-pointer">
-          PUT
+          PATCH
         </option>
         <option value="DELETE" className="text-rose-600 bg-zinc-950 cursor-pointer">
           DELETE

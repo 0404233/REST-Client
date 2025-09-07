@@ -16,8 +16,8 @@ type HeadersTableProps = {
 export const HeadersTable = ({ handleChangeHeaders }: HeadersTableProps) => {
   console.log('HeadersTable');
   const [headers, setHeaders] = useState<Header[]>([
-    { id: '1', key: 'Content-Type', value: 'application/json' },
-    { id: '2', key: 'Accept', value: 'Your-App-Name' },
+    { id: '1', key: 'Content-Type', value: 'application/json; charset=UTF-8' },
+    { id: '2', key: 'Accept', value: 'application/json' },
   ]);
 
   useEffect(() => {
