@@ -8,9 +8,9 @@ export default function Home() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   return (
-    <main className="container flex flex-col items-center flex-grow justify-center">
+    <section className="container flex flex-col items-center flex-grow justify-center">
       {isLogin && <TemplateSignedIn />}
       {!isLogin && <TemplateNotSignedIn />}
-    </main>
+    </section>
   );
 }

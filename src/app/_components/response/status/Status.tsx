@@ -10,15 +10,21 @@ const Status = ({ status, ok }: StatusProps) => {
 
   return (
     <div>
-      <p className="text-lg">Status: {status}</p>
-      <p className="text-lg">
-        Code:
-        {ok ? (
-          <span className="text-green-500"> OK</span>
-        ) : (
-          <span className="text-red-400"> FAIL</span>
-        )}
-      </p>
+      {ok ? (
+        <>
+          <p className="text-lg">Status: OK </p>
+          <p className="text-lg">
+            Code: <span className="text-green-500"> {status}</span>
+          </p>
+        </>
+      ) : (
+        <>
+          <p className="text-lg">Status: FAIL </p>
+          <p className="text-lg">
+            Code: <span className="text-red-400"> {status}</span>
+          </p>
+        </>
+      )}
     </div>
   );
 };

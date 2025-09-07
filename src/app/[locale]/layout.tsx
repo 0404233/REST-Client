@@ -35,7 +35,7 @@ export default async function RootLayout({
       <body className="flex flex-col min-h-screen">
         <NextIntlClientProvider messages={messages}>
           <Header />
-          <main className="flex flex-col items-center flex-grow justify-center">{children}</main>
+          <main className="flex flex-col items-center flex-grow p-4">{children}</main>
           <Footer />
         </NextIntlClientProvider>
       </body>

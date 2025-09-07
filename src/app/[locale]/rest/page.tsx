@@ -82,7 +82,7 @@ const RestClient = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-3/4 border-1 rounded-xl p-4 bg-[var(--bg-rest)]">
+    <div className="flex flex-col gap-4 w-full border-1 rounded-xl p-4 bg-[var(--bg-rest)]">
       <h1 className="text-2xl">REST Client</h1>
       <ApiTable
         handleSubmit={handleSubmit}

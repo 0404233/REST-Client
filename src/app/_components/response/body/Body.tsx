@@ -2,7 +2,7 @@ import JSONPretty from 'react-json-pretty';
 import 'react-json-pretty/themes/acai.css';
 
 type BodyProps = {
-  result?: Record<string, any>[];
+  result?: Record<string, unknown>[];
   error?: string;
 };
 
