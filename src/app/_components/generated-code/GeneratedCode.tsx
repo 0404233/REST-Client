@@ -1,23 +1,38 @@
 'use client';
 
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import ProgrammingLanguages from './programming-languages/ProgrammingLanguages';
 
 type Props = {
-  code: string;
+  code: Record<string, string[]>;
 };
 
 const GeneratedCode: React.FC<Props> = ({ code }) => {
-  if (!code || code.trim() === '') {
+  const [language, setLanguage] = useState<string>('curl');
+
+  const handleChangeLanguage = (e: ChangeEvent<HTMLSelectElement>) => {
+    const language = e.target.value;
+    setLanguage(language);
+  };
+
+  if (!code) {
     return (
-      <div className="mt-4 text-sm text-gray-500">Not enough data to generate request code!</div>
+      <section className="mt-4 text-sm text-gray-500">
+        Not enough data to generate request code!
+      </section>
     );
   }
 
   return (
-    <div className="mt-6">
-      <h2 className="text-xl font-semibold mb-2">Generated code:</h2>
-      <pre className="bg-gray-900 text-white p-4 rounded-md overflow-auto text-sm">{code}</pre>
-    </div>
+    <section>
+      <div className="flex gap-4 items-center mb-2">
+        <h2 className="text-xl font-semibold italic ">Generated code:</h2>
+        <ProgrammingLanguages handleChangeLanguage={handleChangeLanguage} />
+      </div>
+      <pre className="bg-gray-900 text-neutral-400 p-4 rounded-md overflow-auto text-sm">
+        {code[language].join('\n')}
+      </pre>
+    </section>
   );
 };
 

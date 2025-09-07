@@ -39,7 +39,7 @@ export const updatePost = async (props: FetchOptions) => {
   try {
 
 
-    await fetch(url, {
+    await fetch(url + `/${id}`, {
       method: method,
       body: JSON.stringify(body),
       headers: currentHeaders,
@@ -60,14 +60,3 @@ export const deletePost = async (props: Pick<FetchOptions, 'url' | "method">) =>
     console.error(error)
   }
 }
-
-/* 
-  body: JSON.stringify({
-    title: 'foo',
-    body: 'bar',
-    userId: 1,
-  }),
-  headers: {
-    'Content-type': 'application/json; charset=UTF-8',
-  },
-*/

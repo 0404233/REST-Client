@@ -17,6 +17,13 @@ const ResponseTable = ({ responseBody }: ResponseTableProps) => {
     error: undefined,
   };
 
+  if (!status)
+    return (
+      <div className="text-xl">
+        Click <span className="text-rose-300 italic">{'"Submit"'}</span> to complete the request.
+      </div>
+    );
+
   return (
     <div className="flex flex-col gap-2">
       <Status status={status} ok={ok} />

@@ -10,9 +10,18 @@ type RequestPanelProps = {
   responseBody?: ResponseBody;
   body: string;
   setBody: React.Dispatch<React.SetStateAction<string>>;
+  id: string;
+  setId: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const RequestPanel = ({ handleChangeHeaders, responseBody }: RequestPanelProps) => {
+const RequestPanel = ({
+  handleChangeHeaders,
+  responseBody,
+  body,
+  setBody,
+  id,
+  setId,
+}: RequestPanelProps) => {
   console.log('RequestPanel');
 
   const [openCurrentSection, setOpenCurrentSection] = useState({
@@ -37,13 +46,24 @@ const RequestPanel = ({ handleChangeHeaders, responseBody }: RequestPanelProps) 
         <Button handleOpenPanel={handleOpenPanel} sectionName={'body'} />
         <Button handleOpenPanel={handleOpenPanel} sectionName={'response'} />
       </section>
-      <section>
-        {openCurrentSection.headers && <HeadersTable handleChangeHeaders={handleChangeHeaders} />}
 
-        {openCurrentSection.body && <RequestBody />}
+      {openCurrentSection.headers && (
+        <section>
+          <HeadersTable handleChangeHeaders={handleChangeHeaders} />
+        </section>
+      )}
 
-        {openCurrentSection.response && <ResponseTable responseBody={responseBody} />}
-      </section>
+      {openCurrentSection.body && (
+        <section>
+          <RequestBody body={body} setBody={setBody} id={id} setId={setId} />
+        </section>
+      )}
+
+      {openCurrentSection.response && (
+        <section>
+          <ResponseTable responseBody={responseBody} />
+        </section>
+      )}
     </>
   );
 };

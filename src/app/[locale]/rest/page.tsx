@@ -3,11 +3,11 @@
 import ApiTable from '@/_components/api-table/ApiTable';
 import RequestPanel from '@/_components/request-panel/RequestPanel';
 import GeneratedCode from '@/_components/generated-code/GeneratedCode';
-import { getAllPosts, getPost, updatePost, deletePost } from 'app/_lib/fetch-data';
+import { getAllPosts, updatePost, deletePost } from 'app/_lib/fetch-data';
 import { generateCodeSnippet } from 'app/_lib/codegen';
 import { useCallback, useState } from 'react';
 
-type Result = Record<string, any>;
+type Result = Record<string, unknown>;
 
 export type ResponseBody = {
   status?: number;
@@ -36,17 +36,6 @@ const RestClient = () => {
     let response;
 
     try {
-      let parsedBody: Record<string, string> | undefined;
-
-      if (body) {
-        try {
-          parsedBody = JSON.parse(body);
-        } catch (err) {
-          setResponseBody({ error: 'Invalid JSON format in request body' });
-          return;
-        }
-      }
-
       switch (method) {
         case 'GET':
           response = await getAllPosts(url);
@@ -58,7 +47,7 @@ const RestClient = () => {
 
           try {
             parsedBody = JSON.parse(body);
-          } catch (err) {
+          } catch {
             setResponseBody({ error: 'Invalid JSON format in request body' });
             return;
           }
@@ -92,8 +81,8 @@ const RestClient = () => {
         result,
         error: '',
       });
-    } catch (err: any) {
-      setResponseBody({ error: err.message || 'Unknown error' });
+    } catch (err) {
+      if (err instanceof Error) setResponseBody({ error: err.message || 'Unknown error' });
     }
   }, [url, method, body, headers, id]);
 
@@ -112,27 +101,25 @@ const RestClient = () => {
   const codeSnippet = generateCodeSnippet({ url, method, headers, body });
 
   return (
-    <div className="flex flex-col gap-6 w-full border rounded-xl p-6 bg-[var(--bg-rest)]">
+    <div className="flex flex-col gap-4 w-full border rounded-xl p-6 bg-[var(--bg-rest)]">
       <h1 className="text-2xl font-bold">REST Client</h1>
 
       <ApiTable
         handleSubmit={handleSubmit}
         handleChangeMethod={handleChangeMethod}
         handleChangeURL={handleChangeURL}
-        body={body}
-        setBody={setBody}
-        id={id}
-        setId={setId}
       />
+
+      <GeneratedCode code={codeSnippet} />
 
       <RequestPanel
         handleChangeHeaders={handleChangeHeaders}
         responseBody={responseBody}
         body={body}
         setBody={setBody}
+        id={id}
+        setId={setId}
       />
-
-      <GeneratedCode code={codeSnippet.curl} />
     </div>
   );
 };
