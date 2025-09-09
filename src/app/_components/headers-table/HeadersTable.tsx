@@ -17,12 +17,13 @@ export const HeadersTable = ({ handleChangeHeaders }: HeadersTableProps) => {
   console.log('HeadersTable');
   const [headers, setHeaders] = useState<Header[]>([
     { id: '1', key: 'Content-Type', value: 'application/json; charset=UTF-8' },
-    { id: '2', key: 'Accept', value: 'application/json' },
+    { id: '2', key: 'Content-Type', value: 'text/plain' },
+    { id: '3', key: 'Accept', value: 'application/json' },
   ]);
 
   useEffect(() => {
     handleChangeHeaders(headers);
-  }, [headers]);
+  }, [handleChangeHeaders, headers]);
 
   const addHeader = () => {
     const newHeader: Header = {
