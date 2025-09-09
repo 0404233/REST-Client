@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import Header from '@/_components/layout/header/Header';
 import Footer from '@/_components/layout/footer/Footer';
+import AuthProvider from '@/context/AuthContext';
 
 // const geistSans = Geist({
 //   variable: '--font-geist-sans',
@@ -33,11 +34,13 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className="flex flex-col min-h-screen">
-        <NextIntlClientProvider messages={messages}>
-          <Header />
-          <main className="flex flex-col items-center flex-grow p-4">{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider messages={messages}>
+            <Header />
+            <main className="flex flex-col items-center flex-grow p-4">{children}</main>
+            <Footer />
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );

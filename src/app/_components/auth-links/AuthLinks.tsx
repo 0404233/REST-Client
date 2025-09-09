@@ -1,23 +1,31 @@
 'use client';
 
-import { useState } from 'react';
 import LinkTemplate from './link-template/LinkTemplate';
+import { useAuth } from '@/context/AuthContext';
+import { signOut } from 'firebase/auth';
+import { auth } from 'firebase/firebase';
 
 const AuthLinks = () => {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const { user } = useAuth();
+
+  const onSignOut = () => {
+    signOut(auth);
+  };
 
   return (
     <div className="flex gap-4 items-center">
-      {!isLogin && (
+      {!user && (
         <>
           <LinkTemplate href={'/account'}>Sign in</LinkTemplate>
-          <LinkTemplate href={'/account'}>Sign up</LinkTemplate>
+          <LinkTemplate href={'/register'}>Sign up</LinkTemplate>
         </>
       )}
 
-      {isLogin && (
+      {user && (
         <>
-          <LinkTemplate href={'/account'}>Sign Out</LinkTemplate>
+          <LinkTemplate href={'/'} onClick={onSignOut}>
+            Sign Out
+          </LinkTemplate>
         </>
       )}
     </div>

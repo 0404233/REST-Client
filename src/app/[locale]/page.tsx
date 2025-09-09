@@ -2,15 +2,15 @@
 
 import TemplateNotSignedIn from '@/_components/template-not-signed-in/TemplateNotSignedIn';
 import TemplateSignedIn from '@/_components/template-signed-in/TemplateSignedIn';
-import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const { user } = useAuth();
 
   return (
     <section className="container flex flex-col items-center flex-grow justify-center">
-      {isLogin && <TemplateSignedIn />}
-      {!isLogin && <TemplateNotSignedIn />}
+      {user && <TemplateSignedIn />}
+      {!user && <TemplateNotSignedIn />}
     </section>
   );
 }
