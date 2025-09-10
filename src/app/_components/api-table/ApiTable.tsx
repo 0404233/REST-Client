@@ -16,12 +16,10 @@ const ApiTable = ({ handleSubmit, handleChangeMethod, handleChangeURL }: ApiTabl
   console.log('ApiTable');
 
   return (
-    <section className="flex flex-col gap-4 w-full">
-      <div className="flex w-full">
-        <Method setMethod={handleChangeMethod} />
-        <Endpoint handleChangeURL={handleChangeURL} />
-        <Button onClick={handleSubmit} />
-      </div>
+    <section className="flex w-full">
+      <Method setMethod={handleChangeMethod} />
+      <Endpoint handleChangeURL={handleChangeURL} />
+      <Button onClick={handleSubmit} />
     </section>
   );
 };

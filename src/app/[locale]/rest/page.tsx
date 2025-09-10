@@ -28,12 +28,17 @@ const RestClient = () => {
   const [responseBody, setResponseBody] = useState<ResponseBody>();
   const [url, setURL] = useState<string>('https://jsonplaceholder.typicode.com/posts');
   const [method, setMethod] = useState<RequestMethod>('GET');
-  const [headers, setHeaders] = useState<RequestHeader[]>([{ id: '1', key: '', value: '' }]);
+  const [headers, setHeaders] = useState<RequestHeader[]>([
+    { id: '1', key: 'Content-Type', value: 'application/json; charset=UTF-8' },
+    { id: '2', key: 'Content-Type', value: 'text/plain' },
+    { id: '3', key: 'Accept', value: 'application/json' },
+  ]);
   const [body, setBody] = useState<string>('');
   const [id, setId] = useState<string>('');
+  const [methodWithoutID, setMethodWithoutID] = useState<boolean>(false);
 
   const handleSubmit = useCallback(async () => {
-    let response;
+    let response: ResponseBody | undefined;
 
     try {
       switch (method) {
@@ -43,6 +48,11 @@ const RestClient = () => {
         case 'POST':
         case 'PUT':
         case 'PATCH': {
+          if (method !== 'POST' && !id) {
+            setMethodWithoutID(!methodWithoutID);
+            return;
+          }
+
           let parsedBody: Record<string, string>;
 
           try {
@@ -62,7 +72,7 @@ const RestClient = () => {
           break;
         }
         case 'DELETE':
-          response = await deletePost({ url, method });
+          response = await deletePost({ url, method, id });
           break;
         default:
           response = await getAllPosts(url);
@@ -102,7 +112,12 @@ const RestClient = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full border rounded-xl p-6 bg-[var(--bg-rest)]">
-      <h1 className="text-2xl font-bold">REST Client</h1>
+      <div>
+        <h1 className="text-2xl font-bold">REST Client</h1>
+        {methodWithoutID && (
+          <p className="text-rose-400 text-sm italic text-right">Add Resource ID</p>
+        )}
+      </div>
 
       <ApiTable
         handleSubmit={handleSubmit}
