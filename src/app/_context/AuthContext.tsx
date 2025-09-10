@@ -6,12 +6,14 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 
 type AuthContextValue = {
   user: User | null;
+  loading: boolean;
 };
 
-const AuthContext = createContext<AuthContextValue>({ user: null });
+const AuthContext = createContext<AuthContextValue>({ user: null, loading: true });
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -20,11 +22,12 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setUser(null);
       }
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, loading }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);

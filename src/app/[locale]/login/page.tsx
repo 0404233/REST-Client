@@ -1,20 +1,20 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { authFormSchema } from 'app/_lib/formSchema';
+import { loginFormSchema } from 'app/_lib/formSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from 'firebase/firebase';
 import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { redirect } from 'i18n/navigation';
 import { useLocale } from 'next-intl';
 import FormField from '@/_components/form-field/FormField';
-import { AuthFormSchema } from '@/_types/form-field.type';
+import { LoginFormSchema } from '@/_types/form-field.type';
 import { FirebaseError } from 'firebase/app';
 import FormButton from '@/_components/form-field/FormButton';
 
-export default function Register() {
+export default function Login() {
   const { user } = useAuth();
   const locale = useLocale();
 
@@ -27,25 +27,20 @@ export default function Register() {
     handleSubmit,
     formState: { errors, isValid },
     setError,
-  } = useForm<AuthFormSchema>({
-    resolver: zodResolver(authFormSchema),
+  } = useForm<LoginFormSchema>({
+    resolver: zodResolver(loginFormSchema),
     mode: 'onChange',
   });
 
-  const onSubmit = async (data: AuthFormSchema) => {
-    const { email, password, confirmPassword } = data;
-
-    if (password !== confirmPassword) {
-      setError('confirmPassword', { message: "Passwords don't match" });
-      return;
-    }
+  const onSubmit = async (data: LoginFormSchema) => {
+    const { email, password } = data;
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       if (error instanceof FirebaseError) {
-        if (error.code === 'auth/email-already-in-use') {
-          setError('email', { message: 'The user with this email already exists' });
+        if (error.code === 'auth/invalid-credential') {
+          setError('password', { message: 'Invalid credential' });
           return;
         }
       }
@@ -65,14 +60,7 @@ export default function Register() {
         label="Password"
         error={errors.password}
       />
-      <FormField
-        type="password"
-        name="confirmPassword"
-        register={register}
-        label="Confirm password"
-        error={errors.confirmPassword}
-      />
-      <FormButton isValid={isValid} label="Sign up" />
+      <FormButton isValid={isValid} label="Sign in" />
     </form>
   );
 }

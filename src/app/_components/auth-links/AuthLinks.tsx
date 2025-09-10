@@ -16,7 +16,7 @@ const AuthLinks = () => {
     <div className="flex gap-4 items-center">
       {!user && (
         <>
-          <LinkTemplate href={'/account'}>Sign in</LinkTemplate>
+          <LinkTemplate href={'/login'}>Sign in</LinkTemplate>
           <LinkTemplate href={'/register'}>Sign up</LinkTemplate>
         </>
       )}
