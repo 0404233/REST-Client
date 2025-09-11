@@ -3,10 +3,7 @@ import { Link } from 'i18n/navigation';
 const ClientTools = () => {
   return (
     <div className="flex gap-4">
-      <Link
-        href="/rest-client"
-        className="hover:texttransition-text duration-200 hover:text-[#f02eaa]"
-      >
+      <Link href="/rest" className="hover:texttransition-text duration-200 hover:text-[#f02eaa]">
         REST Client
       </Link>
       <Link href="/history" className="hover:texttransition-text duration-200 hover:text-[#f02eaa]">

@@ -8,20 +8,11 @@ import HeadersTable from '../headers-table/HeadersTable';
 type RequestPanelProps = {
   handleChangeHeaders: (headers: RequestHeader[]) => void;
   responseBody?: ResponseBody;
-  body: string;
-  setBody: React.Dispatch<React.SetStateAction<string>>;
-  id: string;
-  setId: React.Dispatch<React.SetStateAction<string>>;
+  setBody: (value: Record<string, string>) => void;
+  body?: Record<string, string>;
 };
 
-const RequestPanel = ({
-  handleChangeHeaders,
-  responseBody,
-  body,
-  setBody,
-  id,
-  setId,
-}: RequestPanelProps) => {
+const RequestPanel = ({ handleChangeHeaders, responseBody, setBody, body }: RequestPanelProps) => {
   console.log('RequestPanel');
 
   const [openCurrentSection, setOpenCurrentSection] = useState({
@@ -55,7 +46,7 @@ const RequestPanel = ({
 
       {openCurrentSection.body && (
         <section>
-          <RequestBody body={body} setBody={setBody} id={id} setId={setId} />
+          <RequestBody setBody={setBody} body={body} />
         </section>
       )}
 

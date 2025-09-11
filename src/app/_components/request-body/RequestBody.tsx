@@ -1,14 +1,28 @@
-import { memo } from 'react';
+'use client';
+
+import { ChangeEvent, memo } from 'react';
 
 type RequestBodyProps = {
-  body: string;
-  setBody: React.Dispatch<React.SetStateAction<string>>;
-  id: string;
-  setId: React.Dispatch<React.SetStateAction<string>>;
+  setBody: (value: Record<string, string>) => void;
+  body?: Record<string, string>;
 };
 
-const RequestBody = ({ body, setBody, id, setId }: RequestBodyProps) => {
+const RequestBody = ({ setBody, body }: RequestBodyProps) => {
   console.log('RequestBody');
+
+  const handleChangeBody = async (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+
+    let parsedBody: Record<string, string>;
+
+    try {
+      parsedBody = JSON.parse(value);
+      setBody(parsedBody);
+    } catch {
+      setBody({ error: 'Invalid JSON format in request body' });
+      return;
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -17,22 +31,10 @@ const RequestBody = ({ body, setBody, id, setId }: RequestBodyProps) => {
       </label>
       <textarea
         id="request-body"
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
+        value={JSON.stringify(body)}
+        onChange={handleChangeBody}
         className="w-full min-h-[120px] p-2 border rounded-md text-sm font-mono"
-        placeholder='{"title": "Hello", "body": "World", "userId": "1"}'
-      />
-
-      <label htmlFor="request-id" className="text-lg font-semibold italic">
-        Resource ID (for PUT/PATCH)
-      </label>
-      <input
-        id="request-id"
-        type="text"
-        value={id}
-        onChange={(e) => setId(e.target.value)}
-        className="w-full p-2 border rounded-md text-sm"
-        placeholder="e.g. 123"
+        placeholder='{"title": "Hello", "body": "World"}'
       />
     </div>
   );

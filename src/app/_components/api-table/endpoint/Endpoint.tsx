@@ -1,5 +1,6 @@
 'use client';
 
+import { baseURL } from 'app/_lib/fetch-data';
 import { ChangeEvent, useState } from 'react';
 
 type EndpointProps = {
@@ -8,7 +9,7 @@ type EndpointProps = {
 
 const Endpoint = ({ handleChangeURL }: EndpointProps) => {
   console.log('Endpoint');
-  const [url, setURL] = useState<string>('https://jsonplaceholder.typicode.com/posts');
+  const [url, setURL] = useState<string>(baseURL);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;

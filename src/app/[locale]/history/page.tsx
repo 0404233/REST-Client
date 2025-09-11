@@ -2,10 +2,8 @@
 
 import EmptyHistoryRequests from '@/_components/history-requests/empty-history-requests/EmptyHistoryRequests';
 import HistoryRequests from '@/_components/history-requests/HistoryRequests';
-import { useState } from 'react';
-
 const History = () => {
-  const [emptyRequest, setIsEmptyRequest] = useState<boolean>(false);
+  const emptyRequest = false;
 
   return (
     <div className="flex flex-col gap-4 border-1 rounded-xl p-4">
@@ -16,3 +14,7 @@ const History = () => {
 };
 
 export default History;
+
+/* 
+Сделать полностью
+*/

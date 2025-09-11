@@ -4,29 +4,56 @@ type GenerateCodeParams = {
   url: string;
   method: RequestMethod;
   headers: RequestHeader[];
-  body?: string;
+  body?: Record<string, string>;
+};
+
+type FormatBody = {
+  body?: Record<string, string>;
+  id?: string;
 };
 
 function formatHeaders(headers: RequestHeader[]): string[] {
-  return headers
-    .filter(h => h.key && h.value)
-    .map(h => `${h.key}: ${h.value}`);
+  return headers.filter((h) => h.key && h.value).map((h) => `${h.key}: ${h.value}`);
+}
+
+export function formatBody(data: FormatBody): string {
+  let bodyStr;
+
+  if (data.body && Object.keys(data.body).length) {
+    if (data.id) {
+      bodyStr = JSON.stringify({ ...data.body, id: data.id, userId: data.id });
+    } else {
+      bodyStr = JSON.stringify(data.body);
+    }
+  } else {
+    bodyStr = '';
+  }
+
+  return bodyStr;
 }
 
 function escapeString(str: string): string {
   return str.replace(/"/g, '\\"');
 }
 
-export function generateCodeSnippet({ url, method, headers, body }: GenerateCodeParams): Record<string, string[]> {
+export function generateCodeSnippet({
+  url,
+  method,
+  headers,
+  body,
+}: GenerateCodeParams): Record<string, string[]> {
   if (!url || !method) return {};
 
   const formattedHeaders = formatHeaders(headers);
+  const formattedBody = body ? formatBody({ body }) : '';
 
-  const headerCurl = formattedHeaders.map(h => `-H "${h}"`).join('\n');
-  const headerJS = formattedHeaders.map(h => `"${h.split(':')[0].trim()}": "${h.split(':')[1].trim()}"`).join(',\n    ');
-  const bodyLine = body ? `-d '${body}'` : '';
-  const bodyJS = body ? `body: JSON.stringify(${body}),` : '';
-  const bodyRaw = body ? body : '';
+  const headerCurl = formattedHeaders.map((h) => `-H "${h}"`).join('\n');
+  const headerJS = formattedHeaders
+    .map((h) => `"${h.split(':')[0].trim()}": "${h.split(':')[1].trim()}"`)
+    .join(',\n    ');
+  const bodyLine = formattedBody;
+  const bodyJS = formattedBody;
+  const bodyRaw = formattedBody;
 
   return {
     curl: [`curl -X ${method}`, `${headerCurl}`, `${bodyLine}`, `"${url}"`],
@@ -35,13 +62,13 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       `fetch("${url}", {`,
       `  method: "${method}",`,
       '  headers: {',
-      headerJS,
+      '    ' + headerJS,
       '  }' + (body ? `,` : ''),
       body ? `  ${bodyJS}` : '',
       '})',
       '  .then(response => response.json())',
       '  .then(data => console.log(data))',
-      '  .catch(error => console.error(error));'
+      '  .catch(error => console.error(error));',
     ],
 
     python: [
@@ -49,15 +76,15 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       '',
       `url = "${url}"`,
       'headers = {',
-      ...formattedHeaders.map(h => {
-        const [key, value] = h.split(':').map(part => part.trim());
+      ...formattedHeaders.map((h) => {
+        const [key, value] = h.split(':').map((part) => part.trim());
         return `    "${key}": "${value}"`;
       }),
       '}',
-      body ? `data = ${body}` : '',
+      formattedBody ? `data = ${formattedBody}` : '',
       '',
       `response = requests.request("${method}", url, headers=headers${body ? ', json=data' : ''})`,
-      'print(response.text)'
+      'print(response.text)',
     ],
 
     nodejs: [
@@ -66,8 +93,8 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       'const options = {',
       `  method: '${method}',`,
       '  headers: {',
-      ...formattedHeaders.map(h => {
-        const [key, value] = h.split(':').map(part => part.trim());
+      ...formattedHeaders.map((h) => {
+        const [key, value] = h.split(':').map((part) => part.trim());
         return `    "${key}": "${value}"`;
       }),
       '  }',
@@ -78,8 +105,8 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       "  res.on('data', chunk => data += chunk);",
       "  res.on('end', () => console.log(data));",
       '});',
-      body ? `req.write(JSON.stringify(${body}));` : '',
-      'req.end();'
+      formattedBody ? `req.write(${formattedBody});` : '',
+      'req.end();',
     ],
 
     go: [
@@ -94,13 +121,14 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       '',
       'func main() {',
       '  client := &http.Client{}',
-      `  req, err := http.NewRequest("${method}", "${url}", ${body}`, ` ? strings.NewReader(\`${escapeString(bodyRaw)}\`) : 'nil'})`,
+      `  req, err := http.NewRequest("${method}", "${url}", ${formattedBody}`,
+      ` ? strings.NewReader(\`${escapeString(bodyRaw)}\`) : 'nil'})`,
       '  if err != nil {',
       '    panic(err)',
       '  }',
       '',
-      ...formattedHeaders.map(h => {
-        const [key, value] = h.split(':').map(part => part.trim());
+      ...formattedHeaders.map((h) => {
+        const [key, value] = h.split(':').map((part) => part.trim());
         return `  req.Header.Set("${key}", "${value}")`;
       }),
       '',
@@ -112,7 +140,7 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       '',
       '  body, _ := ioutil.ReadAll(resp.Body)',
       '  fmt.Println(string(body))',
-      '}'
+      '}',
     ],
 
     java: [
@@ -125,17 +153,19 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       `    URL url = new URL("${url}");`,
       '    HttpURLConnection conn = (HttpURLConnection) url.openConnection();',
       `    conn.setRequestMethod("${method}");`,
-      ...formattedHeaders.map(h => {
-        const [key, value] = h.split(':').map(part => part.trim());
+      ...formattedHeaders.map((h) => {
+        const [key, value] = h.split(':').map((part) => part.trim());
         return `    conn.setRequestProperty("${key}", "${value}");`;
       }),
-      body ? [
-        '    conn.setDoOutput(true);',
-        '    OutputStream os = conn.getOutputStream();',
-        `    os.write("${escapeString(bodyRaw)}".getBytes());`,
-        '    os.flush();',
-        '    os.close();'
-      ].join('\n') : '',
+      formattedBody
+        ? [
+            '    conn.setDoOutput(true);',
+            '    OutputStream os = conn.getOutputStream();',
+            `    os.write("${escapeString(bodyRaw)}".getBytes());`,
+            '    os.flush();',
+            '    os.close();',
+          ].join('\n')
+        : '',
       '',
       '    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));',
       '    String inputLine;',
@@ -146,7 +176,7 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       '    in.close();',
       '    System.out.println(content.toString());',
       '  }',
-      '}'
+      '}',
     ],
 
     csharp: [
@@ -161,10 +191,12 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       '    var request = new HttpRequestMessage {',
       `      Method = HttpMethod.${method.charAt(0).toUpperCase() + method.slice(1).toLowerCase()},`,
       `      RequestUri = new Uri("${url}"),`,
-      body ? `      Content = new StringContent("${escapeString(bodyRaw)}", Encoding.UTF8, "application/json"),` : '',
+      formattedBody
+        ? `      Content = new StringContent("${escapeString(bodyRaw)}", Encoding.UTF8, "application/json"),`
+        : '',
       '    };',
-      ...formattedHeaders.map(h => {
-        const [key, value] = h.split(':').map(part => part.trim());
+      ...formattedHeaders.map((h) => {
+        const [key, value] = h.split(':').map((part) => part.trim());
         return `    request.Headers.Add("${key}", "${value}");`;
       }),
       '',
@@ -172,7 +204,7 @@ export function generateCodeSnippet({ url, method, headers, body }: GenerateCode
       '    var responseBody = await response.Content.ReadAsStringAsync();',
       '    Console.WriteLine(responseBody);',
       '  }',
-      '}'
-    ]
+      '}',
+    ],
   };
 }

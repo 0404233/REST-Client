@@ -3,3 +3,7 @@ const Variables = () => {
 };
 
 export default Variables;
+
+/* 
+Сделать полностью
+*/

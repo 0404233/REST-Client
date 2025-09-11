@@ -22,11 +22,9 @@ const AuthLinks = () => {
       )}
 
       {user && (
-        <>
-          <LinkTemplate href={'/'} onClick={onSignOut}>
-            Sign Out
-          </LinkTemplate>
-        </>
+        <LinkTemplate href={'/'} onClick={onSignOut}>
+          Sign Out
+        </LinkTemplate>
       )}
     </div>
   );

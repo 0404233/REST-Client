@@ -1,9 +1,22 @@
 'use client';
 
+/* 
+
+RESTful-клиент
+Этот маршрут должен быть частным.
+
+Остальной клиентский код должен загружаться отложенно (чтобы неавторизованный пользователь не мог загрузить код).
+
+Селектор метода. Выбранный метод должен быть отражен в URL-адресе приложения (например, http://restclient.com/GET ).
+
+Обратите внимание, что редактор тела запроса должен поддерживать как минимум JSON(+) и простой текст(проверить работает или нет и если что доделать). 
+
+*/
+
 import ApiTable from '@/_components/api-table/ApiTable';
 import RequestPanel from '@/_components/request-panel/RequestPanel';
 import GeneratedCode from '@/_components/generated-code/GeneratedCode';
-import { getAllPosts, updatePost, deletePost } from 'app/_lib/fetch-data';
+import { baseURL, fetchData } from 'app/_lib/fetch-data';
 import { generateCodeSnippet } from 'app/_lib/codegen';
 import { useCallback, useState } from 'react';
 
@@ -25,76 +38,31 @@ export type RequestHeader = {
 };
 
 const RestClient = () => {
-  const [responseBody, setResponseBody] = useState<ResponseBody>();
-  const [url, setURL] = useState<string>('https://jsonplaceholder.typicode.com/posts');
+  const [responseBody, setResponseBody] = useState<ResponseBody | undefined>();
+  const [url, setURL] = useState<string>(baseURL);
   const [method, setMethod] = useState<RequestMethod>('GET');
+  const [body, setBody] = useState<Record<string, string>>();
   const [headers, setHeaders] = useState<RequestHeader[]>([
     { id: '1', key: 'Content-Type', value: 'application/json; charset=UTF-8' },
     { id: '2', key: 'Content-Type', value: 'text/plain' },
     { id: '3', key: 'Accept', value: 'application/json' },
   ]);
-  const [body, setBody] = useState<string>('');
-  const [id, setId] = useState<string>('');
-  const [methodWithoutID, setMethodWithoutID] = useState<boolean>(false);
 
   const handleSubmit = useCallback(async () => {
-    let response: ResponseBody | undefined;
-
     try {
-      switch (method) {
-        case 'GET':
-          response = await getAllPosts(url);
-          break;
-        case 'POST':
-        case 'PUT':
-        case 'PATCH': {
-          if (method !== 'POST' && !id) {
-            setMethodWithoutID(!methodWithoutID);
-            return;
-          }
+      if (body?.error) throw new Error('Invalid JSON format in request body');
 
-          let parsedBody: Record<string, string>;
+      const result = await fetchData({ url, method, headers, body });
 
-          try {
-            parsedBody = JSON.parse(body);
-          } catch {
-            setResponseBody({ error: 'Invalid JSON format in request body' });
-            return;
-          }
-
-          response = await updatePost({
-            url,
-            method,
-            headers,
-            id,
-            body: parsedBody,
-          });
-          break;
-        }
-        case 'DELETE':
-          response = await deletePost({ url, method, id });
-          break;
-        default:
-          response = await getAllPosts(url);
-      }
-
-      if (!response) {
-        setResponseBody({ error: 'Request execution error' });
-        return;
-      }
-
-      const { status, ok, result } = response;
-
-      setResponseBody({
-        status,
-        ok,
-        result,
-        error: '',
-      });
+      if (result) setResponseBody(result);
     } catch (err) {
-      if (err instanceof Error) setResponseBody({ error: err.message || 'Unknown error' });
+      setResponseBody({
+        error: err instanceof Error ? err.message : 'Unknown error',
+        status: 500,
+        ok: false,
+      });
     }
-  }, [url, method, body, headers, id]);
+  }, [url, method, headers, body]);
 
   const handleChangeMethod = useCallback((value: RequestMethod) => {
     setMethod(value);
@@ -114,9 +82,10 @@ const RestClient = () => {
     <div className="flex flex-col gap-4 w-full border rounded-xl p-6 bg-[var(--bg-rest)]">
       <div>
         <h1 className="text-2xl font-bold">REST Client</h1>
-        {methodWithoutID && (
-          <p className="text-rose-400 text-sm italic text-right">Add Resource ID</p>
+        {responseBody?.error && (
+          <p className="text-rose-400 text-xl text-right">{responseBody.error}</p>
         )}
+        {body?.error && <p className="text-rose-400 text-xl text-right">{body.error}</p>}
       </div>
 
       <ApiTable
@@ -130,10 +99,8 @@ const RestClient = () => {
       <RequestPanel
         handleChangeHeaders={handleChangeHeaders}
         responseBody={responseBody}
-        body={body}
         setBody={setBody}
-        id={id}
-        setId={setId}
+        body={body}
       />
     </div>
   );
