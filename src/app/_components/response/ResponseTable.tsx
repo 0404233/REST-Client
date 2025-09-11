@@ -20,7 +20,8 @@ const ResponseTable = ({ responseBody }: ResponseTableProps) => {
   if (!status)
     return (
       <div className="text-xl">
-        Click <span className="text-rose-300 italic">{'"Submit"'}</span> to complete the request.
+        Click <span className="text-emerald-500 font-bold italic">{'"Submit"'}</span> to complete
+        the request
       </div>
     );
 

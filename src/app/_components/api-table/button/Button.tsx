@@ -11,8 +11,7 @@ const Button = ({ onClick }: ButtonProps) => {
     <button
       onClick={onClick}
       className="ml-1 cursor-pointer text-xl 
-                  px-1 transition-all duration-200 
-                  hover:text-[#f02eaa]"
+                  px-1 border-1 rounded-sm border-transparent hover:border-[var(--foreground)] transition-border duration-300"
     >
       Submit
     </button>

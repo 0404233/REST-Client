@@ -23,10 +23,10 @@ const Endpoint = ({ handleChangeURL }: EndpointProps) => {
         type="text"
         id="url"
         placeholder="Enter endpoint"
-        className="border-1 py-1 px-2 rounded-sm outline-none border-gray-300
-                   focus:border-fuchsia-300
+        className="border-2 py-1 px-2 outline-none border-[var(--border-url)]
+                   focus:text-[var(--border-url-focus)]
                    focus:outline-none transition-colors cursor-pointer
-                   focus:text-fuchsia-300"
+                   "
         value={url}
         onChange={handleChange}
       />

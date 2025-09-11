@@ -55,7 +55,7 @@ export default function Register() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-2 w-lg m-auto space-y-6 bg-white p-6 rounded-lg shadow-md"
+      className="flex flex-col gap-2 w-lg m-auto space-y-6 bg-[var(--bg-rest)] p-6 rounded-lg shadow-2xl border-2 border-gray-500"
     >
       <FormField type="email" name="email" register={register} label="Email" error={errors.email} />
       <FormField

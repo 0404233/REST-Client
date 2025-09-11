@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="flex justify-between items-center px-4 py-2">
       <Team />
-      <h1 className="text-xl">2025</h1>
+      <h1 className="text-2xl font-bold italic">2025</h1>
       <RssLogo />
     </footer>
   );

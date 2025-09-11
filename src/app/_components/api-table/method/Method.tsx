@@ -30,7 +30,7 @@ const Method = ({ setMethod }: MethodProps) => {
   const selectClassName = MethodColors[selectedMethod];
 
   return (
-    <div className="flex flex-col justify-center gap-1 border-t-1 border-l-1 border-b-1 p-1">
+    <div className="flex flex-col justify-center gap-1 border-[var(--border-url)] border-t-2 border-l-2 border-b-2 p-1">
       <select
         name="method"
         id="method"

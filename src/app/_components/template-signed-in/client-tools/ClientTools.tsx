@@ -3,15 +3,21 @@ import { Link } from 'i18n/navigation';
 const ClientTools = () => {
   return (
     <div className="flex gap-4">
-      <Link href="/rest" className="hover:texttransition-text duration-200 hover:text-[#f02eaa]">
+      <Link
+        href="/rest"
+        className="border-1 border-transparent duration-300 hover:border-b-[var(--border-b)]"
+      >
         REST Client
       </Link>
-      <Link href="/history" className="hover:texttransition-text duration-200 hover:text-[#f02eaa]">
+      <Link
+        href="/history"
+        className="border-1 border-transparent duration-300 hover:border-b-[var(--border-b)]"
+      >
         History
       </Link>
       <Link
         href="/variables"
-        className="hover:texttransition-text duration-200 hover:text-[#f02eaa]"
+        className="border-1 border-transparent duration-300 hover:border-b-[var(--border-b)]"
       >
         Variables
       </Link>

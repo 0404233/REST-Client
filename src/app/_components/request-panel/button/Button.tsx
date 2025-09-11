@@ -10,9 +10,9 @@ const Button = ({ handleOpenPanel, sectionName }: ButtonProps) => {
   return (
     <button
       onClick={() => handleOpenPanel(sectionName)}
-      className="cursor-pointer text-xl text-center text-orange-400 
-      hover:text-orange-300 border-transparent border-1 
-      focus:border-b-amber-200 transition capitalize"
+      className="cursor-pointer text-xl text-center text-[var(--text-color)] font-bold
+      hover:text-[var(--text-color)] border-transparent border-1 
+      focus:border-b-[var(--text-color)] transition capitalize"
     >
       {sectionName}
     </button>

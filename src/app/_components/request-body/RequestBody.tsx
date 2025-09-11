@@ -1,14 +1,14 @@
 'use client';
 
-import { ChangeEvent, memo } from 'react';
+import { ChangeEvent, memo, useState } from 'react';
 
 type RequestBodyProps = {
   setBody: (value: Record<string, string>) => void;
-  body?: Record<string, string>;
 };
 
-const RequestBody = ({ setBody, body }: RequestBodyProps) => {
+const RequestBody = ({ setBody }: RequestBodyProps) => {
   console.log('RequestBody');
+  const [localBody, setLocalBody] = useState<string>();
 
   const handleChangeBody = async (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -17,6 +17,7 @@ const RequestBody = ({ setBody, body }: RequestBodyProps) => {
 
     try {
       parsedBody = JSON.parse(value);
+      setLocalBody(value);
       setBody(parsedBody);
     } catch {
       setBody({ error: 'Invalid JSON format in request body' });
@@ -31,7 +32,7 @@ const RequestBody = ({ setBody, body }: RequestBodyProps) => {
       </label>
       <textarea
         id="request-body"
-        value={JSON.stringify(body)}
+        value={localBody}
         onChange={handleChangeBody}
         className="w-full min-h-[120px] p-2 border rounded-md text-sm font-mono"
         placeholder='{"title": "Hello", "body": "World"}'

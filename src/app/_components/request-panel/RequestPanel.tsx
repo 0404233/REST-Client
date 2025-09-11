@@ -9,10 +9,9 @@ type RequestPanelProps = {
   handleChangeHeaders: (headers: RequestHeader[]) => void;
   responseBody?: ResponseBody;
   setBody: (value: Record<string, string>) => void;
-  body?: Record<string, string>;
 };
 
-const RequestPanel = ({ handleChangeHeaders, responseBody, setBody, body }: RequestPanelProps) => {
+const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPanelProps) => {
   console.log('RequestPanel');
 
   const [openCurrentSection, setOpenCurrentSection] = useState({
@@ -46,7 +45,7 @@ const RequestPanel = ({ handleChangeHeaders, responseBody, setBody, body }: Requ
 
       {openCurrentSection.body && (
         <section>
-          <RequestBody setBody={setBody} body={body} />
+          <RequestBody setBody={setBody} />
         </section>
       )}
 

@@ -7,7 +7,7 @@ export const teamConfig = [
     height: 30,
     alt: 'Andrey',
     className:
-      'w-auto h-auto cursor-pointer rounded-lg transition-shadow duration-200 hover:shadow-[0_0_5px_2px_rgba(240,46,170)]',
+      'w-auto h-auto cursor-pointer rounded-lg transition-shadow duration-200 hover:shadow-[0_0_7px_2px_var(--foreground)]',
   },
   {
     href: 'https://github.com/sashaSVNT',
@@ -17,7 +17,7 @@ export const teamConfig = [
     height: 30,
     alt: 'Alexander',
     className:
-      'w-auto h-auto cursor-pointer rounded-lg transition-shadow duration-200 hover:shadow-[0_0_5px_2px_rgba(240,46,170)]',
+      'w-auto h-auto cursor-pointer rounded-lg transition-shadow duration-200 hover:shadow-[0_0_7px_2px_var(--foreground)]',
   },
   {
     href: 'https://github.com/heyArtik-dev',
@@ -27,6 +27,6 @@ export const teamConfig = [
     height: 30,
     alt: 'Аndrey2',
     className:
-      'w-auto h-auto cursor-pointer rounded-lg transition-shadow duration-200 hover:shadow-[0_0_5px_2px_rgba(240,46,170)]',
+      'w-auto h-auto cursor-pointer rounded-lg transition-shadow duration-200 hover:shadow-[0_0_7px_2px_var(--foreground)]',
   },
 ];

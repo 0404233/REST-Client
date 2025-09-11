@@ -100,7 +100,6 @@ const RestClient = () => {
         handleChangeHeaders={handleChangeHeaders}
         responseBody={responseBody}
         setBody={setBody}
-        body={body}
       />
     </div>
   );

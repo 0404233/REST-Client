@@ -60,7 +60,7 @@ export const HeadersTable = ({ handleChangeHeaders }: HeadersTableProps) => {
       <button
         type="button"
         onClick={addHeader}
-        className="text-start cursor-pointer hover:text-emerald-600 transition"
+        className="text-start font-bold cursor-pointer hover:text-emerald-600 transition"
       >
         + Add header
       </button>

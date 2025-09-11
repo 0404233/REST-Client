@@ -17,8 +17,8 @@ const ImageTemplate = ({ src, lang, activeLang, setLang }: ImageTemplateProps) =
       priority={true}
       className={`cursor-pointer transition-shadow duration-200 rounded-[10] ${
         activeLang === lang
-          ? 'shadow-[0_0_7px_2px_rgba(240,46,170,0.7)]'
-          : 'hover:shadow-[0_0_5px_1px_rgba(240,46,170,0.7)]'
+          ? 'shadow-[0_0_7px_2px_var(--foreground)]'
+          : 'hover:shadow-[0_0_7px_2px_var(--foreground)]'
       }`}
       onClick={() => setLang(lang)}
     />
