@@ -1,26 +1,18 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #c4b5ff3b;
-  --foreground: #171717;
-  --bg-rest: #c1c4e9c2;
-  --bg-select: #c1c4e9c2;
-  --border-url: #696868;
-  --border-b: #0a0a0a;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --bg-rest: #5d67a940;
   --border-url-focus: #35eeb6;
-  --text-color: #171717;
-  --text-color-hover: #17171770;
-  --bg-color: #e5e5f7;
+  --bg-select: #5d67a940;
+  --border-url: #f5f5f5;
+  --border-b: #f5f5f5;
+  --text-color: #f5f5f5;
+  --text-color-hover: #f5f5f570;
   --bg-image:
-    repeating-radial-gradient(circle at 0 0, transparent 0, #e5e5f7 10px),
-    repeating-linear-gradient(#444cf755, #b8b8be);
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    repeating-radial-gradient(circle at 0 0, transparent 0, #777781 10px),
+    repeating-linear-gradient(#00000055, #000000);
 }
 
 @media (prefers-color-scheme: dark) {

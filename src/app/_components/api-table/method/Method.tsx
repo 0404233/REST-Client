@@ -4,7 +4,7 @@ import { RequestMethod } from 'app/[locale]/rest/page';
 import { ChangeEvent, memo, useState } from 'react';
 
 const MethodColors = {
-  GET: 'text-green-600',
+  GET: 'text-green-500',
   POST: 'text-yellow-300',
   PUT: 'text-sky-500',
   PATCH: 'text-orange-500',
@@ -37,7 +37,7 @@ const Method = ({ setMethod }: MethodProps) => {
         className={`${selectClassName} outline-none italic font-bold`}
         onChange={handleChangeColor}
       >
-        <option value="GET" className="text-green-600 bg-zinc-950 cursor-pointer">
+        <option value="GET" className="text-green-500 bg-zinc-950 cursor-pointer">
           GET
         </option>
         <option value="POST" className="text-yellow-300 bg-zinc-950 cursor-pointer">
