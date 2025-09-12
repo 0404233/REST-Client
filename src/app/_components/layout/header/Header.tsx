@@ -2,7 +2,7 @@ import NavBar from './navbar/NavBar';
 
 const Header = () => {
   return (
-    <header className="px-4">
+    <header>
       <NavBar />
     </header>
   );
