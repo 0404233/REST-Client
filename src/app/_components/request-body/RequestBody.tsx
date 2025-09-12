@@ -3,25 +3,26 @@
 import { ChangeEvent, memo, useState } from 'react';
 
 type RequestBodyProps = {
-  setBody: (value: Record<string, string>) => void;
+  setBody: (value: Record<string, string> | string) => void;
 };
 
 const RequestBody = ({ setBody }: RequestBodyProps) => {
   console.log('RequestBody');
-  const [localBody, setLocalBody] = useState<string>();
+  const [localBody, setLocalBody] = useState<string>('');
 
-  const handleChangeBody = async (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeBody = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-
-    let parsedBody: Record<string, string>;
+    setLocalBody(value);
 
     try {
-      parsedBody = JSON.parse(value);
-      setLocalBody(value);
-      setBody(parsedBody);
+      const parsed = JSON.parse(value);
+      if (typeof parsed === 'object' && parsed !== null) {
+        setBody(parsed);
+      } else {
+        setBody(value);
+      }
     } catch {
-      setBody({ error: 'Invalid JSON format in request body' });
-      return;
+      setBody(value);
     }
   };
 
@@ -35,7 +36,7 @@ const RequestBody = ({ setBody }: RequestBodyProps) => {
         value={localBody}
         onChange={handleChangeBody}
         className="w-full min-h-[120px] p-2 border rounded-md text-sm font-mono"
-        placeholder='{"title": "Hello", "body": "World"}'
+        placeholder='{"title": "Hello", "body": "World"} or text'
       />
     </div>
   );
