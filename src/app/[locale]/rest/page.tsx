@@ -2,23 +2,21 @@
 
 /* 
 
-RESTful-клиент
-Этот маршрут должен быть частным.
-
-Остальной клиентский код должен загружаться отложенно (чтобы неавторизованный пользователь не мог загрузить код).
-
 Селектор метода. Выбранный метод должен быть отражен в URL-адресе приложения (например, http://restclient.com/GET ).
 
 Обратите внимание, что редактор тела запроса должен поддерживать как минимум JSON(+) и простой текст(проверить работает или нет и если что доделать). 
 
 */
 
-import ApiTable from '@/_components/api-table/ApiTable';
-import RequestPanel from '@/_components/request-panel/RequestPanel';
-import GeneratedCode from '@/_components/generated-code/GeneratedCode';
 import { baseURL, fetchData } from 'app/_lib/fetch-data';
 import { generateCodeSnippet } from 'app/_lib/codegen';
-import { useCallback, useState } from 'react';
+import { lazy, useCallback, useMemo, useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { useLocale } from 'next-intl';
+import { redirect } from 'i18n/navigation';
+const ApiTable = lazy(() => import('@/_components/api-table/ApiTable'));
+const RequestPanel = lazy(() => import('@/_components/request-panel/RequestPanel'));
+const GeneratedCode = lazy(() => import('@/_components/generated-code/GeneratedCode'));
 
 type Result = Record<string, unknown>;
 
@@ -38,6 +36,11 @@ export type RequestHeader = {
 };
 
 const RestClient = () => {
+  const { user } = useAuth();
+  const locale = useLocale();
+
+  if (!user) redirect({ href: '/', locale });
+
   const [responseBody, setResponseBody] = useState<ResponseBody | undefined>();
   const [url, setURL] = useState<string>(baseURL);
   const [method, setMethod] = useState<RequestMethod>('GET');
@@ -76,7 +79,10 @@ const RestClient = () => {
     setURL(url);
   }, []);
 
-  const codeSnippet = generateCodeSnippet({ url, method, headers, body });
+  const codeSnippet = useMemo(
+    () => generateCodeSnippet({ url, method, headers, body }),
+    [body, headers, method, url]
+  );
 
   return (
     <div className="flex flex-col gap-4 w-full border rounded-xl p-6 bg-[var(--bg-rest)]">
