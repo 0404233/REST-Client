@@ -4,30 +4,38 @@ type GenerateCodeParams = {
   url: string;
   method: RequestMethod;
   headers: RequestHeader[];
-  body?: Record<string, string>;
+  // body?: Record<string, string>;
+  body?: string | null;
 };
 
-type FormatBody = {
-  body?: Record<string, string>;
-  id?: string;
-};
+// type FormatBody = {
+//   // body?: Record<string, string>;
+//   body?: string;
+//   id?: string;
+// };
 
 function formatHeaders(headers: RequestHeader[]): string[] {
   return headers.filter((h) => h.key && h.value).map((h) => `${h.key}: ${h.value}`);
 }
 
-export function formatBody(data: FormatBody): string {
+export function formatBody(body: string, id?: string): string {
   let bodyStr;
 
-  if (data.body && Object.keys(data.body).length) {
-    if (data.id) {
-      bodyStr = JSON.stringify({ ...data.body, id: data.id, userId: data.id });
-    } else {
-      bodyStr = JSON.stringify(data.body);
-    }
+  if (id) {
+    bodyStr = JSON.stringify({ body, id: id, userId: id });
   } else {
-    bodyStr = '';
+    bodyStr = JSON.stringify(body);
   }
+
+  // if (data.body && Object.keys(data.body).length) {
+  //   if (data.id) {
+  //     bodyStr = JSON.stringify({ ...data.body, id: data.id, userId: data.id });
+  //   } else {
+  //     bodyStr = JSON.stringify(data.body);
+  //   }
+  // } else {
+  //   bodyStr = '';
+  // }
 
   return bodyStr;
 }
@@ -45,7 +53,7 @@ export function generateCodeSnippet({
   if (!url || !method) return {};
 
   const formattedHeaders = formatHeaders(headers);
-  const formattedBody = body ? formatBody({ body }) : '';
+  const formattedBody = body ? formatBody(body) : '';
 
   const headerCurl = formattedHeaders.map((h) => `-H "${h}"`).join('\n');
   const headerJS = formattedHeaders
@@ -159,12 +167,12 @@ export function generateCodeSnippet({
       }),
       formattedBody
         ? [
-            '    conn.setDoOutput(true);',
-            '    OutputStream os = conn.getOutputStream();',
-            `    os.write("${escapeString(bodyRaw)}".getBytes());`,
-            '    os.flush();',
-            '    os.close();',
-          ].join('\n')
+          '    conn.setDoOutput(true);',
+          '    OutputStream os = conn.getOutputStream();',
+          `    os.write("${escapeString(bodyRaw)}".getBytes());`,
+          '    os.flush();',
+          '    os.close();',
+        ].join('\n')
         : '',
       '',
       '    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));',

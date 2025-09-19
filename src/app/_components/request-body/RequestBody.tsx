@@ -1,16 +1,17 @@
 'use client';
 
-import { ChangeEvent, memo } from 'react';
+import { ChangeEvent, memo, useState } from 'react';
 
 type RequestBodyProps = {
-  body: string;
   setBody: (value: string) => void;
 };
 
-const RequestBody = ({ body, setBody }: RequestBodyProps) => {
+const RequestBody = ({ setBody }: RequestBodyProps) => {
+  const [localBody, setLocalBody] = useState<string>('');
 
   const handleChangeBody = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setBody(e.target.value);
+    setLocalBody(e.target.value);
   };
 
   return (
@@ -20,7 +21,7 @@ const RequestBody = ({ body, setBody }: RequestBodyProps) => {
       </label>
       <textarea
         id="request-body"
-        value={body}
+        value={localBody}
         onChange={handleChangeBody}
         className="w-full min-h-[120px] p-2 border rounded-md text-sm font-mono"
         placeholder='{"title": "Hello", "body": "World"} or text'

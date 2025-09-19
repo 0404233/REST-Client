@@ -77,7 +77,7 @@ export const updateFullPost = async (props: FetchOptions) => {
   const { url, body, method, headers } = props;
 
   const id = url.split('/')[4];
-  const currentBody = await formatBody({ body, id });
+  const currentBody = formatBody({ body, id });
 
   try {
     if (!id) throw new Error('Invalid ID');

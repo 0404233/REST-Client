@@ -8,12 +8,14 @@
 
 */
 
-import { baseURL, fetchData } from 'app/_lib/fetch-data';
+import { baseURL } from 'app/_lib/fetch-data';
+// import { baseURL, fetchData } from 'app/_lib/fetch-data';
 import { generateCodeSnippet } from 'app/_lib/codegen';
 import { lazy, useCallback, useMemo, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useLocale } from 'next-intl';
 import { redirect } from 'i18n/navigation';
+import { convertHeaders } from 'app/_lib/convertHeaders';
 const ApiTable = lazy(() => import('@/_components/api-table/ApiTable'));
 const RequestPanel = lazy(() => import('@/_components/request-panel/RequestPanel'));
 const GeneratedCode = lazy(() => import('@/_components/generated-code/GeneratedCode'));
@@ -44,28 +46,47 @@ const RestClient = () => {
   const [responseBody, setResponseBody] = useState<ResponseBody | undefined>();
   const [url, setURL] = useState<string>(baseURL);
   const [method, setMethod] = useState<RequestMethod>('GET');
-  const [body, setBody] = useState<Record<string, string>>();
+  const [body, setBody] = useState<string | null>(null);
+  // const [body, setBody] = useState<Record<string, string>>();
   const [headers, setHeaders] = useState<RequestHeader[]>([
-    { id: '1', key: 'Content-Type', value: 'application/json; charset=UTF-8' },
+    { id: '1', key: 'Content-Type', value: 'application/json' },
     { id: '2', key: 'Content-Type', value: 'text/plain' },
     { id: '3', key: 'Accept', value: 'application/json' },
   ]);
+  console.log(body, typeof body);
 
   const handleSubmit = useCallback(async () => {
-    try {
-      if (body?.error) throw new Error('Invalid JSON format in request body');
+    const fetchOptions: RequestInit = {
+      method: method,
+      headers: convertHeaders(headers),
+    };
 
-      const result = await fetchData({ url, method, headers, body });
-
-      if (result) setResponseBody(result);
-    } catch (err) {
-      setResponseBody({
-        error: err instanceof Error ? err.message : 'Unknown error',
-        status: 500,
-        ok: false,
-      });
+    if (method !== 'GET') {
+      fetchOptions.body = JSON.stringify(body);
     }
-  }, [url, method, headers, body]);
+
+    const response = await fetch(`/api?url=${url}`, fetchOptions);
+    const result = await response.json();
+
+    setResponseBody(result);
+    setBody(null);
+  }, [body, headers, method, url]);
+
+  // const handleSubmit = useCallback(async () => {
+  //   try {
+  //     if (body?.error) throw new Error('Invalid JSON format in request body');
+
+  //     const result = await fetchData({ url, method, headers, body });
+
+  //     if (result) setResponseBody(result);
+  //   } catch (err) {
+  //     setResponseBody({
+  //       error: err instanceof Error ? err.message : 'Unknown error',
+  //       status: 500,
+  //       ok: false,
+  //     });
+  //   }
+  // }, [url, method, headers, body]);
 
   const handleChangeMethod = useCallback((value: RequestMethod) => {
     setMethod(value);
@@ -89,9 +110,8 @@ const RestClient = () => {
       <div>
         <h1 className="text-2xl font-bold">REST Client</h1>
         {responseBody?.error && (
-          <p className="text-rose-400 text-xl text-right">{responseBody.error}</p>
+          <p className="text-rose-700 text-xl text-right">{responseBody.error}</p>
         )}
-        {body?.error && <p className="text-rose-400 text-xl text-right">{body.error}</p>}
       </div>
 
       <ApiTable

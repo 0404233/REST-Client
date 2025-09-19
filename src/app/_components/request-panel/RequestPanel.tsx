@@ -8,7 +8,8 @@ import HeadersTable from '../headers-table/HeadersTable';
 type RequestPanelProps = {
   handleChangeHeaders: (headers: RequestHeader[]) => void;
   responseBody?: ResponseBody;
-  setBody: (value: Record<string, string>) => void;
+  setBody: (value: string) => void;
+  // setBody: (value: Record<string, string>) => void;
 };
 
 const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPanelProps) => {
