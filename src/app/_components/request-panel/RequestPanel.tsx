@@ -8,8 +8,8 @@ import HeadersTable from '../headers-table/HeadersTable';
 type RequestPanelProps = {
   handleChangeHeaders: (headers: RequestHeader[]) => void;
   responseBody?: ResponseBody;
-  setBody: (value: string) => void;
-  // setBody: (value: Record<string, string>) => void;
+  body: string;
+  setBody: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPanelProps) => {

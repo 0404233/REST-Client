@@ -1,21 +1,14 @@
 'use client';
 
-/* 
-
-Селектор метода. Выбранный метод должен быть отражен в URL-адресе приложения (например, http://restclient.com/GET ).
-
-Обратите внимание, что редактор тела запроса должен поддерживать как минимум JSON(+) и простой текст(проверить работает или нет и если что доделать). 
-
-*/
-
 import { baseURL } from 'app/_lib/fetch-data';
-// import { baseURL, fetchData } from 'app/_lib/fetch-data';
 import { generateCodeSnippet } from 'app/_lib/codegen';
-import { lazy, useCallback, useMemo, useState } from 'react';
+import { lazy, useCallback, useMemo, useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useLocale } from 'next-intl';
 import { redirect } from 'i18n/navigation';
 import { convertHeaders } from 'app/_lib/convertHeaders';
+import { substituteVariables, Variable } from '../variables/page';
+
 const ApiTable = lazy(() => import('@/_components/api-table/ApiTable'));
 const RequestPanel = lazy(() => import('@/_components/request-panel/RequestPanel'));
 const GeneratedCode = lazy(() => import('@/_components/generated-code/GeneratedCode'));
@@ -37,6 +30,8 @@ export type RequestHeader = {
   value: string;
 };
 
+const LOCAL_STORAGE_KEY = 'rest-client-variables';
+
 const RestClient = () => {
   const { user } = useAuth();
   const locale = useLocale();
@@ -46,47 +41,73 @@ const RestClient = () => {
   const [responseBody, setResponseBody] = useState<ResponseBody | undefined>();
   const [url, setURL] = useState<string>(baseURL);
   const [method, setMethod] = useState<RequestMethod>('GET');
-  const [body, setBody] = useState<string | null>(null);
-  // const [body, setBody] = useState<Record<string, string>>();
+  const [body, setBody] = useState<string>('');
   const [headers, setHeaders] = useState<RequestHeader[]>([
     { id: '1', key: 'Content-Type', value: 'application/json' },
-    { id: '2', key: 'Content-Type', value: 'text/plain' },
-    { id: '3', key: 'Accept', value: 'application/json' },
+    { id: '2', key: 'Accept', value: 'application/json' },
   ]);
-  console.log(body, typeof body);
+  const [variables, setVariables] = useState<Variable[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const data = localStorage.getItem(LOCAL_STORAGE_KEY);
+        setVariables(data ? JSON.parse(data) : []);
+      } catch {
+        setVariables([]);
+      }
+    }
+  }, []);
 
   const handleSubmit = useCallback(async () => {
-    const fetchOptions: RequestInit = {
-      method: method,
-      headers: convertHeaders(headers),
-    };
+    try {
+      const substitutedURL = substituteVariables(url, variables);
+      const substitutedBody = substituteVariables(body, variables);
+      const substitutedHeaders = headers.map((h) => ({
+        ...h,
+        key: substituteVariables(h.key, variables),
+        value: substituteVariables(h.value, variables),
+      }));
 
-    if (method !== 'GET') {
-      fetchOptions.body = JSON.stringify(body);
+      const fetchOptions: RequestInit = {
+        method,
+        headers: convertHeaders(substitutedHeaders),
+      };
+
+      if (method !== 'GET' && body) {
+        const contentType = substitutedHeaders.find(
+          (h) => h.key.toLowerCase() === 'content-type'
+        )?.value;
+
+        if (contentType?.includes('application/json')) {
+          try {
+            JSON.parse(substitutedBody);
+            fetchOptions.body = substitutedBody;
+          } catch {
+            setResponseBody({
+              error: 'Invalid JSON format in request body',
+              status: 400,
+              ok: false,
+            });
+            return;
+          }
+        } else {
+          fetchOptions.body = substitutedBody;
+        }
+      }
+
+      const response = await fetch(`/api?url=${encodeURIComponent(substitutedURL)}`, fetchOptions);
+      const result = await response.json();
+
+      setResponseBody(result);
+    } catch (err) {
+      setResponseBody({
+        error: err instanceof Error ? err.message : 'Unknown error',
+        status: 500,
+        ok: false,
+      });
     }
-
-    const response = await fetch(`/api?url=${url}`, fetchOptions);
-    const result = await response.json();
-
-    setResponseBody(result);
-    setBody(null);
-  }, [body, headers, method, url]);
-
-  // const handleSubmit = useCallback(async () => {
-  //   try {
-  //     if (body?.error) throw new Error('Invalid JSON format in request body');
-
-  //     const result = await fetchData({ url, method, headers, body });
-
-  //     if (result) setResponseBody(result);
-  //   } catch (err) {
-  //     setResponseBody({
-  //       error: err instanceof Error ? err.message : 'Unknown error',
-  //       status: 500,
-  //       ok: false,
-  //     });
-  //   }
-  // }, [url, method, headers, body]);
+  }, [body, headers, method, url, variables]);
 
   const handleChangeMethod = useCallback((value: RequestMethod) => {
     setMethod(value);
@@ -126,6 +147,7 @@ const RestClient = () => {
         handleChangeHeaders={handleChangeHeaders}
         responseBody={responseBody}
         setBody={setBody}
+        body={body}
       />
     </div>
   );
