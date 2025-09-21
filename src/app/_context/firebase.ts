@@ -1,2 +1,2 @@
 // Мок для тестов!!!
-export const auth = {} as any
+export const auth = {} as any;
