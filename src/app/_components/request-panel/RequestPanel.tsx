@@ -35,9 +35,9 @@ const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPan
   return (
     <>
       <section className="flex justify-around">
-        <Button handleOpenPanel={handleOpenPanel} sectionName={t('headers')} />
-        <Button handleOpenPanel={handleOpenPanel} sectionName={t('body')} />
-        <Button handleOpenPanel={handleOpenPanel} sectionName={t('response')} />
+        <Button handleOpenPanel={handleOpenPanel} sectionName={'headers'} />
+        <Button handleOpenPanel={handleOpenPanel} sectionName={'body'} />
+        <Button handleOpenPanel={handleOpenPanel} sectionName={'response'} />
       </section>
 
       {openCurrentSection.headers && (

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import TemplateSignedIn from '../../_components/template-signed-in/TemplateSignedIn';
 import TemplateNotSignedIn from '../../_components/template-not-signed-in/TemplateNotSignedIn';
 import { useAuth } from '../../_context/AuthContext';
@@ -28,22 +28,26 @@ function loadVariables(): Variable[] {
 }
 
 function saveVariables(vars: Variable[]) {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(vars));
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(vars));
+  } catch {
+
+  }
 }
 
 function VariablesContent() {
   const t = useTranslations();
-
-  const [variables, setVariables] = useState<Variable[]>([]);
+  const [variables, setVariables] = useState<Variable[]>(() => loadVariables());
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const isFirstSave = useRef(true);
 
   useEffect(() => {
-    setVariables(loadVariables());
-  }, []);
-
-  useEffect(() => {
+    if (isFirstSave.current) {
+      isFirstSave.current = false;
+      return;
+    }
     saveVariables(variables);
   }, [variables]);
 
@@ -70,7 +74,7 @@ function VariablesContent() {
   };
 
   const handleDelete = (idx: number) => {
-    setVariables(variables.filter((_, i) => i !== idx));
+    setVariables((prev) => prev.filter((_, i) => i !== idx));
     if (editIndex === idx) {
       setEditIndex(null);
       setName('');
@@ -84,9 +88,10 @@ function VariablesContent() {
       <p>
         {t('variableUsage')} <code>{'{{variableName}}'}</code>.
         <br />
-        {t('examples')}: <code>{'https://api.com/{{packageName}}'}</code>, header: <code>{'{{AUTH_TOKEN}}'}</code>,
-        body: <code>{'{\"foo\": \"{{BAR}}\"}'}</code>
+        {t('examples')}: <code>{'https://api.com/{{packageName}}'}</code>, header:{' '}
+        <code>{'{{AUTH_TOKEN}}'}</code>, body: <code>{'{"foo": "{{BAR}}"}'}</code>
       </p>
+
       <form onSubmit={handleAddOrEdit} style={{ marginBottom: 24 }}>
         <input
           placeholder={t('name')}
@@ -111,11 +116,13 @@ function VariablesContent() {
               setName('');
               setValue('');
             }}
+            style={{ marginLeft: 8 }}
           >
             {t('cancel')}
           </button>
         )}
       </form>
+
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -141,6 +148,7 @@ function VariablesContent() {
               </td>
             </tr>
           ))}
+
           {variables.length === 0 && (
             <tr>
               <td colSpan={3} style={{ textAlign: 'center', color: '#888' }}>
@@ -158,8 +166,8 @@ export default function VariablesPage() {
   const { user, loading } = useAuth();
 
   if (loading) return null;
-
   if (!user) return <TemplateNotSignedIn />;
+
   return (
     <TemplateSignedIn user={user}>
       <VariablesContent />
