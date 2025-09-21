@@ -16,7 +16,6 @@ const config: Config = {
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts, tsx}', '!src/**/*.d.ts'],
-  coverageReporters: ['json-summary'],
   coverageDirectory: 'coverage',
 };
 
