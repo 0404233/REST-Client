@@ -1,29 +1,23 @@
-import { NextRequest } from 'next/server'
+import { NextRequest } from 'next/server';
 
-const BASE_URL = 'https://jsonplaceholder.typicode.com/posts/'
+const BASE_URL = 'https://jsonplaceholder.typicode.com/posts/';
 
 export async function GET(request: NextRequest) {
   try {
     const url = request.nextUrl.searchParams.get('url');
 
     if (BASE_URL !== url) {
-      return Response.json(
-        { error: 'Invalid URL format' },
-        { status: 400 }
-      )
+      return Response.json({ error: 'Invalid URL format' }, { status: 400 });
     }
 
     const response = await fetch(url, {
-      method: 'GET'
-    })
-    const result = await response.json()
+      method: 'GET',
+    });
+    const result = await response.json();
 
-    return Response.json({ result, status: response.status, ok: response.statusText })
+    return Response.json({ result, status: response.status, ok: response.statusText });
   } catch {
-    return Response.json(
-      { error: 'Failed to fetch posts' },
-      { status: 500 }
-    )
+    return Response.json({ error: 'Failed to fetch posts' }, { status: 500 });
   }
 }
 
@@ -34,10 +28,7 @@ export async function POST(request: NextRequest) {
     const url = request.nextUrl.searchParams.get('url');
 
     if (BASE_URL !== url) {
-      return Response.json(
-        { error: 'Invalid URL format' },
-        { status: 400 }
-      )
+      return Response.json({ error: 'Invalid URL format' }, { status: 400 });
     }
 
     const response = await fetch(BASE_URL, {
@@ -51,14 +42,14 @@ export async function POST(request: NextRequest) {
     return Response.json({
       result,
       status: response.status,
-      ok: response.ok
+      ok: response.ok,
     });
   } catch (error) {
     return Response.json(
       {
         error: error instanceof Error ? error.message : 'POST failed',
         status: 500,
-        ok: false
+        ok: false,
       },
       { status: 500 }
     );
@@ -72,17 +63,11 @@ export async function PUT(request: NextRequest) {
     const id = url?.split('/')[4];
 
     if (!id) {
-      return Response.json(
-        { error: `ID is required for PUT request` },
-        { status: 400 }
-      );
+      return Response.json({ error: `ID is required for PUT request` }, { status: 400 });
     }
 
     if (BASE_URL + id !== url) {
-      return Response.json(
-        { error: 'Invalid URL format' },
-        { status: 400 }
-      )
+      return Response.json({ error: 'Invalid URL format' }, { status: 400 });
     }
 
     const resourceUrl = `${BASE_URL}${id}`;
@@ -98,14 +83,14 @@ export async function PUT(request: NextRequest) {
     return Response.json({
       result,
       status: response.status,
-      ok: response.ok
+      ok: response.ok,
     });
   } catch (error) {
     return Response.json(
       {
         error: error instanceof Error ? error.message : 'POST failed',
         status: 500,
-        ok: false
+        ok: false,
       },
       { status: 500 }
     );
@@ -114,16 +99,12 @@ export async function PUT(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-
     const { body, headers } = await request.json();
     const url = request.nextUrl.searchParams.get('url');
     const id = url?.split('/')[4];
 
     if (!id) {
-      return Response.json(
-        { error: `ID is required for PATCH request` },
-        { status: 400 }
-      );
+      return Response.json({ error: `ID is required for PATCH request` }, { status: 400 });
     }
 
     const resourceUrl = `${BASE_URL}${id}`;
@@ -143,7 +124,7 @@ export async function PATCH(request: NextRequest) {
     return Response.json({
       result,
       status: response.status,
-      ok: response.ok
+      ok: response.ok,
     });
   } catch (error) {
     return Response.json(
@@ -155,15 +136,11 @@ export async function PATCH(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-
     const url = request.nextUrl.searchParams.get('url');
     const id = url?.split('/')[4];
 
     if (!id) {
-      return Response.json(
-        { error: `ID is required for PATCH request` },
-        { status: 400 }
-      );
+      return Response.json({ error: `ID is required for PATCH request` }, { status: 400 });
     }
 
     const resourceUrl = `${BASE_URL}${id}`;
@@ -175,12 +152,9 @@ export async function DELETE(request: NextRequest) {
     return Response.json({
       result: `Resource with ID ${id} was successfully deleted`,
       status: response.status,
-      ok: response.ok
+      ok: response.ok,
     });
   } catch {
-    return Response.json(
-      { error: 'DELETE failed' },
-      { status: 500 }
-    );
+    return Response.json({ error: 'DELETE failed' }, { status: 500 });
   }
 }

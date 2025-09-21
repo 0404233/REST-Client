@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useLocale, useTranslations } from 'next-intl';
 import { redirect } from 'i18n/navigation';
 import { convertHeaders } from 'app/_lib/convertHeaders';
-import { substituteVariables, Variable } from '../variables/page';
+import { Variable } from '../variables/page';
 
 const ApiTable = lazy(() => import('@/_components/api-table/ApiTable'));
 const RequestPanel = lazy(() => import('@/_components/request-panel/RequestPanel'));
@@ -31,6 +31,13 @@ export type RequestHeader = {
 };
 
 const LOCAL_STORAGE_KEY = 'rest-client-variables';
+
+function substituteVariables(str: string, variables: Variable[]): string {
+  return str.replace(/{{\s*([\w\d_]+)\s*}}/g, (_, varName) => {
+    const found = variables.find((v) => v.name === varName);
+    return found ? found.value : '';
+  });
+}
 
 const RestClient = () => {
   const { user } = useAuth();

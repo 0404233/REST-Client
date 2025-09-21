@@ -1,12 +1,7 @@
-import type { Metadata } from 'next';
 import './globals.css';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import AuthProvider from '@/context/AuthContext';
-
-export const metadata: Metadata = {
-  title: 'REST Client',
-};
 
 export default async function RootLayout({
   children,

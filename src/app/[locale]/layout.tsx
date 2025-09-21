@@ -1,12 +1,7 @@
-import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import Header from '@/_components/layout/header/Header';
 import Footer from '@/_components/layout/footer/Footer';
-
-export const metadata: Metadata = {
-  title: 'REST Client',
-};
 
 export default async function RootLayout({
   children,
@@ -15,7 +10,6 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-
   const { locale } = await params;
 
   const messages = await getMessages({ locale });

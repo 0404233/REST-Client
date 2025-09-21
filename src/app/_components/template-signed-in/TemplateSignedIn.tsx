@@ -12,7 +12,9 @@ const TemplateSignedIn = ({ user, children }: TemplateNotSignedInProps) => {
   const t = useTranslations();
   return (
     <div className="flex flex-col items-center gap-3">
-      <h1 className="text-3xl italic">{t('welcomeBack')}, {user ? user.email : t('user')}!</h1>
+      <h1 className="text-3xl italic">
+        {t('welcomeBack')}, {user ? user.email : t('user')}!
+      </h1>
       <ClientTools />
       {children}
     </div>

@@ -8,21 +8,30 @@ import { useTranslations } from 'next-intl';
 
 export type Variable = { name: string; value: string };
 
-export function substituteVariables(str: string, variables: Variable[]): string {
-  return str.replace(/{{\s*([\w\d_]+)\s*}}/g, (_, varName) => {
-    const found = variables.find((v) => v.name === varName);
-    return found ? found.value : '';
-  });
-}
-
 const LOCAL_STORAGE_KEY = 'rest-client-variables';
 
 function loadVariables(): Variable[] {
   if (typeof window === 'undefined') return [];
+
   try {
-    const data = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
-  } catch {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!raw) {
+      return [];
+    }
+    return JSON.parse(raw) as Variable[];
+  } catch (error) {
+    console.error(
+      `VariablesPage: could not parse "${LOCAL_STORAGE_KEY}" from localStorage:`,
+      error
+    );
+    try {
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+    } catch (removeError) {
+      console.error(
+        `VariablesPage: failed to remove corrupted key "${LOCAL_STORAGE_KEY}":`,
+        removeError
+      );
+    }
     return [];
   }
 }
@@ -30,8 +39,11 @@ function loadVariables(): Variable[] {
 function saveVariables(vars: Variable[]) {
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(vars));
-  } catch {
-
+  } catch (error) {
+    console.error(
+      `VariablesPage: failed to save variables to localStorage "${LOCAL_STORAGE_KEY}":`,
+      error
+    );
   }
 }
 
