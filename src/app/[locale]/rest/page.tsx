@@ -4,7 +4,7 @@ import { baseURL } from 'app/_lib/fetch-data';
 import { generateCodeSnippet } from 'app/_lib/codegen';
 import { lazy, useCallback, useMemo, useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { redirect } from 'i18n/navigation';
 import { convertHeaders } from 'app/_lib/convertHeaders';
 import { substituteVariables, Variable } from '../variables/page';
@@ -35,6 +35,7 @@ const LOCAL_STORAGE_KEY = 'rest-client-variables';
 const RestClient = () => {
   const { user } = useAuth();
   const locale = useLocale();
+  const t = useTranslations();
 
   if (!user) redirect({ href: '/', locale });
 
@@ -85,7 +86,7 @@ const RestClient = () => {
             fetchOptions.body = substitutedBody;
           } catch {
             setResponseBody({
-              error: 'Invalid JSON format in request body',
+              error: t('invalidJson'),
               status: 400,
               ok: false,
             });
@@ -102,12 +103,12 @@ const RestClient = () => {
       setResponseBody(result);
     } catch (err) {
       setResponseBody({
-        error: err instanceof Error ? err.message : 'Unknown error',
+        error: err instanceof Error ? err.message : t('invalidUrl'),
         status: 500,
         ok: false,
       });
     }
-  }, [body, headers, method, url, variables]);
+  }, [body, headers, method, url, variables, t]);
 
   const handleChangeMethod = useCallback((value: RequestMethod) => {
     setMethod(value);
@@ -129,7 +130,7 @@ const RestClient = () => {
   return (
     <div className="flex flex-col gap-4 w-full border rounded-xl p-6 bg-[var(--bg-rest)]">
       <div>
-        <h1 className="text-2xl font-bold">REST Client</h1>
+        <h1 className="text-2xl font-bold">{t('restClient')}</h1>
         {responseBody?.error && (
           <p className="text-rose-700 text-xl text-right">{responseBody.error}</p>
         )}

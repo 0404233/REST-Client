@@ -5,9 +5,11 @@ import { useAuth } from '@/context/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from 'firebase/firebase';
 import LoadingSkeleton from '../loading-skeleton/LoadingSkeleton';
+import { useTranslations } from 'next-intl';
 
 const AuthLinks = () => {
   const { user, loading } = useAuth();
+  const t = useTranslations('auth');
 
   const onSignOut = () => {
     signOut(auth);
@@ -21,16 +23,16 @@ const AuthLinks = () => {
     <div className="flex gap-4 items-center">
       {!user && (
         <>
-          <LinkTemplate href={'/login'}>Sign in</LinkTemplate>
-          <LinkTemplate href={'/register'}>Sign up</LinkTemplate>
+          <LinkTemplate href="/login">{t('signIn')}</LinkTemplate>
+          <LinkTemplate href="/register">{t('signUp')}</LinkTemplate>
         </>
       )}
 
       {user && (
         <>
-          <LinkTemplate href={'/'}>Main</LinkTemplate>
-          <LinkTemplate href={'/'} onClick={onSignOut}>
-            Sign Out
+          <LinkTemplate href="/">{t('main')}</LinkTemplate>
+          <LinkTemplate href="/" onClick={onSignOut}>
+            {t('signOut')}
           </LinkTemplate>
         </>
       )}

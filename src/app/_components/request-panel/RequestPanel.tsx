@@ -4,6 +4,7 @@ import ResponseTable from '../response/ResponseTable';
 import { memo, useCallback, useState } from 'react';
 import Button from './button/Button';
 import HeadersTable from '../headers-table/HeadersTable';
+import { useTranslations } from 'next-intl';
 
 type RequestPanelProps = {
   handleChangeHeaders: (headers: RequestHeader[]) => void;
@@ -13,6 +14,7 @@ type RequestPanelProps = {
 };
 
 const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPanelProps) => {
+  const t = useTranslations('rest');
   console.log('RequestPanel');
 
   const [openCurrentSection, setOpenCurrentSection] = useState({
@@ -33,9 +35,9 @@ const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPan
   return (
     <>
       <section className="flex justify-around">
-        <Button handleOpenPanel={handleOpenPanel} sectionName={'headers'} />
-        <Button handleOpenPanel={handleOpenPanel} sectionName={'body'} />
-        <Button handleOpenPanel={handleOpenPanel} sectionName={'response'} />
+        <Button handleOpenPanel={handleOpenPanel} sectionName={t('headers')} />
+        <Button handleOpenPanel={handleOpenPanel} sectionName={t('body')} />
+        <Button handleOpenPanel={handleOpenPanel} sectionName={t('response')} />
       </section>
 
       {openCurrentSection.headers && (

@@ -8,7 +8,7 @@ import { auth } from 'firebase/firebase';
 import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { redirect } from 'i18n/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import FormField from '@/_components/form-field/FormField';
 import { LoginFormSchema } from '@/_types/form-field.type';
 import { FirebaseError } from 'firebase/app';
@@ -17,6 +17,7 @@ import FormButton from '@/_components/form-field/FormButton';
 export default function Login() {
   const { user } = useAuth();
   const locale = useLocale();
+  const t = useTranslations('auth');
 
   useEffect(() => {
     if (user) redirect({ href: '/', locale });
@@ -40,7 +41,7 @@ export default function Login() {
     } catch (error) {
       if (error instanceof FirebaseError) {
         if (error.code === 'auth/invalid-credential') {
-          setError('password', { message: 'Invalid credential' });
+          setError('password', { message: t('invalidCredential') });
           return;
         }
       }
@@ -52,15 +53,21 @@ export default function Login() {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-2 w-lg m-auto space-y-6 bg-[var(--bg-rest)] p-6 rounded-lg shadow-2xl border-2 border-gray-500"
     >
-      <FormField type="email" name="email" register={register} label="Email" error={errors.email} />
+      <FormField
+        type="email"
+        name="email"
+        register={register}
+        label={t('email')}
+        error={errors.email}
+      />
       <FormField
         type="password"
         name="password"
         register={register}
-        label="Password"
+        label={t('password')}
         error={errors.password}
       />
-      <FormButton isValid={isValid} label="Sign in" />
+      <FormButton isValid={isValid} label={t('signIn')} />
     </form>
   );
 }

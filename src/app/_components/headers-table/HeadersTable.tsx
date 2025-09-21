@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { RequestHeader } from 'app/[locale]/rest/page';
 import HeaderRow from './header-row/HeaderRow';
@@ -14,7 +15,7 @@ type HeadersTableProps = {
 };
 
 export const HeadersTable = ({ handleChangeHeaders }: HeadersTableProps) => {
-  console.log('HeadersTable');
+  const t = useTranslations('rest');
   const [headers, setHeaders] = useState<Header[]>([
     { id: '1', key: 'Content-Type', value: 'application/json' },
     { id: '2', key: 'Content-Type', value: 'text/plain' },
@@ -62,7 +63,7 @@ export const HeadersTable = ({ handleChangeHeaders }: HeadersTableProps) => {
         onClick={addHeader}
         className="text-start font-bold cursor-pointer hover:text-emerald-400 transition"
       >
-        + Add header
+        + {t('addHeader')}
       </button>
     </div>
   );

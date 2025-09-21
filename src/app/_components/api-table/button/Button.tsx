@@ -1,11 +1,12 @@
 import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 
 type ButtonProps = {
   onClick: () => void;
 };
 
 const Button = ({ onClick }: ButtonProps) => {
-  console.log('Button');
+  const t = useTranslations('common');
 
   return (
     <button
@@ -13,7 +14,7 @@ const Button = ({ onClick }: ButtonProps) => {
       className="ml-1 cursor-pointer text-xl 
                   px-1 border-1 rounded-sm border-transparent hover:border-[var(--foreground)] transition-border duration-300"
     >
-      Submit
+      {t('submit')}
     </button>
   );
 };

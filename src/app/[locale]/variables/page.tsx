@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import TemplateSignedIn from '../../_components/template-signed-in/TemplateSignedIn';
 import TemplateNotSignedIn from '../../_components/template-not-signed-in/TemplateNotSignedIn';
 import { useAuth } from '../../_context/AuthContext';
+import { useTranslations } from 'next-intl';
 
 export type Variable = { name: string; value: string };
 
@@ -31,6 +32,8 @@ function saveVariables(vars: Variable[]) {
 }
 
 function VariablesContent() {
+  const t = useTranslations();
+
   const [variables, setVariables] = useState<Variable[]>([]);
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
@@ -77,29 +80,29 @@ function VariablesContent() {
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: 24 }}>
-      <h1>Variables</h1>
+      <h1>{t('variables')}</h1>
       <p>
-        You can define variables and use them in your requests as <code>{'{{variableName}}'}</code>.
+        {t('variableUsage')} <code>{'{{variableName}}'}</code>.
         <br />
-        Example: <code>{'https://api.com/{{packageName}}'}</code>, header:{' '}
-        <code>{'{{AUTH_TOKEN}}'}</code>, body: <code>{'{"foo": "{{BAR}}"}'}</code>
+        {t('examples')}: <code>{'https://api.com/{{packageName}}'}</code>, header: <code>{'{{AUTH_TOKEN}}'}</code>,
+        body: <code>{'{\"foo\": \"{{BAR}}\"}'}</code>
       </p>
       <form onSubmit={handleAddOrEdit} style={{ marginBottom: 24 }}>
         <input
-          placeholder="Name"
+          placeholder={t('name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
           style={{ marginRight: 8 }}
         />
         <input
-          placeholder="Value"
+          placeholder={t('value')}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           required
           style={{ marginRight: 8 }}
         />
-        <button type="submit">{editIndex !== null ? 'Save' : 'Add'}</button>
+        <button type="submit">{editIndex !== null ? t('save') : t('add')}</button>
         {editIndex !== null && (
           <button
             type="button"
@@ -109,15 +112,15 @@ function VariablesContent() {
               setValue('');
             }}
           >
-            Cancel
+            {t('cancel')}
           </button>
         )}
       </form>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left' }}>Name</th>
-            <th style={{ textAlign: 'left' }}>Value</th>
+            <th style={{ textAlign: 'left' }}>{t('name')}</th>
+            <th style={{ textAlign: 'left' }}>{t('value')}</th>
             <th />
           </tr>
         </thead>
@@ -131,9 +134,9 @@ function VariablesContent() {
                 <code>{v.value}</code>
               </td>
               <td>
-                <button onClick={() => handleEdit(idx)}>Edit</button>
+                <button onClick={() => handleEdit(idx)}>{t('edit')}</button>
                 <button onClick={() => handleDelete(idx)} style={{ marginLeft: 8 }}>
-                  Delete
+                  {t('delete')}
                 </button>
               </td>
             </tr>
@@ -141,7 +144,7 @@ function VariablesContent() {
           {variables.length === 0 && (
             <tr>
               <td colSpan={3} style={{ textAlign: 'center', color: '#888' }}>
-                No variables yet
+                {t('noVariables')}
               </td>
             </tr>
           )}
