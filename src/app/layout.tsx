@@ -6,7 +6,7 @@ import AuthProvider from '@/context/AuthContext';
 export default async function RootLayout({
   children,
 }: Readonly<{
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale?: string }>;
   children: React.ReactNode;
 }>) {
   const messages = await getMessages();

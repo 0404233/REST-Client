@@ -1,3 +1,4 @@
+import React, { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import Header from '@/_components/layout/header/Header';
@@ -7,10 +8,13 @@ export default async function RootLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  children: ReactNode;
+  params: Promise<{}>;
 }) {
-  const { locale } = await params;
+  const raw = await params;
+  const { locale } = raw as {
+    locale: string;
+  };
 
   const messages = await getMessages({ locale });
 

@@ -1,4 +1,4 @@
-import { RequestHeader } from 'app/[locale]/rest/page';
+import { RequestHeader } from '@/_types/request';
 
 export const convertHeaders = (headers: RequestHeader[]) => {
   return headers

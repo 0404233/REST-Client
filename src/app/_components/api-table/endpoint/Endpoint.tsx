@@ -1,6 +1,6 @@
 'use client';
 
-import { baseURL } from 'app/_lib/fetch-data';
+import { BASE_URL } from 'app/api/route';
 import { ChangeEvent, useState } from 'react';
 
 type EndpointProps = {
@@ -8,7 +8,7 @@ type EndpointProps = {
 };
 
 const Endpoint = ({ handleChangeURL }: EndpointProps) => {
-  const [url, setURL] = useState<string>(baseURL);
+  const [url, setURL] = useState<string>(BASE_URL);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;

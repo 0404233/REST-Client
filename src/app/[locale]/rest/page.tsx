@@ -1,6 +1,5 @@
 'use client';
 
-import { baseURL } from 'app/_lib/fetch-data';
 import { generateCodeSnippet } from 'app/_lib/codegen';
 import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -8,7 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { redirect } from 'i18n/navigation';
 import { convertHeaders } from 'app/_lib/convertHeaders';
 import { RequestDetails, RequestHeader, RequestMethod, ResponseBody } from '@/_types/request';
-
+import { BASE_URL } from 'app/api/route'; 
 import { Variable } from '../variables/page';
 
 const ApiTable = lazy(() => import('@/_components/api-table/ApiTable'));
@@ -32,7 +31,7 @@ const RestClient = () => {
   if (!user) redirect({ href: '/', locale });
 
   const [responseBody, setResponseBody] = useState<ResponseBody | undefined>();
-  const [url, setURL] = useState<string>(baseURL);
+  const [url, setURL] = useState<string>(BASE_URL);
   const [method, setMethod] = useState<RequestMethod>('GET');
   const [body, setBody] = useState<string>('');
   const [headers, setHeaders] = useState<RequestHeader[]>([
