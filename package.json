@@ -10,8 +10,8 @@
     "lint:fix": "eslint --fix",
     "format:fix": "prettier --write .",
     "prepare": "husky",
-    "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [

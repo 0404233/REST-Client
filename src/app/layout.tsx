@@ -1,7 +1,7 @@
 import './globals.css';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import AuthProvider from '@/context/AuthContext';
+import AuthProvider from './_context/AuthContext';
 
 export default async function RootLayout({
   children,

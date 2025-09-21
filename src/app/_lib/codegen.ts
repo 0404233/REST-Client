@@ -14,7 +14,7 @@ type GenerateCodeParams = {
 //   id?: string;
 // };
 
-function formatHeaders(headers: RequestHeader[]): string[] {
+export function formatHeaders(headers: RequestHeader[]): string[] {
   return headers.filter((h) => h.key && h.value).map((h) => `${h.key}: ${h.value}`);
 }
 

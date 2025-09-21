@@ -1,7 +1,7 @@
 'use client';
 
 import LinkTemplate from './link-template/LinkTemplate';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '../../_context/AuthContext';
 import LoadingSkeleton from '../loading-skeleton/LoadingSkeleton';
 import { useTranslations } from 'next-intl';
 

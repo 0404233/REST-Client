@@ -1,40 +1,16 @@
-import { defineRouting } from 'next-intl/routing';
+import { describe, it, expect } from 'vitest'
+import { routing } from './routing'
 
-jest.mock('next-intl/routing', () => ({
-  __esModule: true,
-  defineRouting: jest.fn((config) => ({
-    ...config,
-    __mockedResult__: true,
-  })),
-}));
+describe('routing configuration', () => {
+  it('exposes the correct locales array', () => {
+    expect(routing.locales).toEqual(['en', 'ru'])
+  })
 
-describe('i18n routing module', () => {
-  interface MockedRouting {
-    locales: string[];
-    defaultLocale: string;
-    __mockedResult__: true;
-  }
+  it('uses the correct default locale', () => {
+    expect(routing.defaultLocale).toBe('en')
+  })
 
-  let routing: MockedRouting;
-
-  beforeAll(async () => {
-    const mod = await import('./routing');
-    routing = mod.routing as unknown as MockedRouting;
-  });
-
-  it('calls defineRouting with correct locales and defaultLocale', () => {
-    expect(defineRouting).toHaveBeenCalledTimes(1);
-    expect(defineRouting).toHaveBeenCalledWith({
-      locales: ['en', 'ru'],
-      defaultLocale: 'en',
-    });
-  });
-
-  it('exports the value returned by defineRouting', () => {
-    expect(routing).toEqual({
-      locales: ['en', 'ru'],
-      defaultLocale: 'en',
-      __mockedResult__: true,
-    });
-  });
-});
+  it('ensures defaultLocale is one of the locales', () => {
+    expect(routing.locales).toContain(routing.defaultLocale)
+  })
+})

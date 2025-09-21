@@ -1,52 +1,30 @@
-import createMiddleware from 'next-intl/middleware';
+import { describe, it, expect, vi } from 'vitest'
+import { routing } from './i18n/routing'
 
-jest.mock('next-intl/middleware', () => ({
+const { createMiddlewareStub } = vi.hoisted(() => ({
+  createMiddlewareStub: vi.fn((...args: any[]) => 'MIDDLEWARE'),
+}))
+
+vi.mock('next-intl/middleware', () => ({
   __esModule: true,
-  default: jest.fn((routing) => ({
-    __mockedMiddleware__: true,
-    routing,
-  })),
-}));
+  default: createMiddlewareStub,
+}))
 
-jest.mock('./i18n/routing', () => ({
-  __esModule: true,
-  routing: { locales: ['en', 'ru'], defaultLocale: 'en' },
-}));
+import middleware, { config } from './middleware'
 
-describe('middleware entrypoint', () => {
-  interface MockedMiddlewareResult {
-    __mockedMiddleware__: boolean;
-    routing: { locales: string[]; defaultLocale: string };
-  }
+describe('i18n middleware setup', () => {
+  it('calls createMiddleware with the routing config', () => {
+    expect(createMiddlewareStub).toHaveBeenCalledTimes(1)
+    expect(createMiddlewareStub).toHaveBeenCalledWith(routing)
+  })
 
-  let middleware: MockedMiddlewareResult;
-  let config: { matcher: string };
+  it('exports the middleware function returned by createMiddleware', () => {
+    expect(middleware).toBe('MIDDLEWARE')
+  })
 
-  beforeAll(async () => {
-    const mod = await import('./middleware');
-
-    middleware = mod.default as unknown as MockedMiddlewareResult;
-    config = mod.config;
-  });
-
-  it('calls createMiddleware with the routing object', () => {
-    expect(createMiddleware).toHaveBeenCalledTimes(1);
-    expect(createMiddleware).toHaveBeenCalledWith({
-      locales: ['en', 'ru'],
-      defaultLocale: 'en',
-    });
-  });
-
-  it('default export is the result of createMiddleware()', () => {
-    expect(middleware).toEqual({
-      __mockedMiddleware__: true,
-      routing: { locales: ['en', 'ru'], defaultLocale: 'en' },
-    });
-  });
-
-  it('exports the correct config.matcher', () => {
+  it('exports the correct matcher config', () => {
     expect(config).toEqual({
       matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)',
-    });
-  });
-});
+    })
+  })
+})
