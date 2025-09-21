@@ -1,4 +1,4 @@
-import { ResponseBody } from 'app/[locale]/rest/page';
+import { ResponseBody } from '@/_types/request';
 import Body from './body/Body';
 import Status from './status/Status';
 import { memo } from 'react';
@@ -8,8 +8,6 @@ type ResponseTableProps = {
 };
 
 const ResponseTable = ({ responseBody }: ResponseTableProps) => {
-  console.log('res', responseBody);
-
   const { status, ok, result, error } = responseBody || {
     status: undefined,
     ok: undefined,

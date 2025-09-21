@@ -16,8 +16,6 @@ type MethodProps = {
 };
 
 const Method = ({ setMethod }: MethodProps) => {
-  console.log('Method');
-
   const [selectedMethod, setSelectedMethod] = useState<keyof typeof MethodColors>('GET');
 
   const handleChangeColor = (e: ChangeEvent<HTMLSelectElement>) => {

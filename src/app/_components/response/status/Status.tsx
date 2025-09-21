@@ -4,8 +4,6 @@ type StatusProps = {
 };
 
 const Status = ({ status, ok }: StatusProps) => {
-  console.log('Status');
-
   if (!status) return null;
 
   return (
