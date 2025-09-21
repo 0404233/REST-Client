@@ -8,7 +8,6 @@ type EndpointProps = {
 };
 
 const Endpoint = ({ handleChangeURL }: EndpointProps) => {
-  console.log('Endpoint');
   const [url, setURL] = useState<string>(baseURL);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

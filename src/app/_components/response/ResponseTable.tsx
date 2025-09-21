@@ -8,8 +8,6 @@ type ResponseTableProps = {
 };
 
 const ResponseTable = ({ responseBody }: ResponseTableProps) => {
-  console.log('ResponseTable');
-
   const { status, ok, result, error } = responseBody || {
     status: undefined,
     ok: undefined,

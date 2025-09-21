@@ -4,7 +4,6 @@ import ResponseTable from '../response/ResponseTable';
 import { memo, useCallback, useState } from 'react';
 import Button from './button/Button';
 import HeadersTable from '../headers-table/HeadersTable';
-import { useTranslations } from 'next-intl';
 
 type RequestPanelProps = {
   handleChangeHeaders: (headers: RequestHeader[]) => void;
@@ -14,9 +13,6 @@ type RequestPanelProps = {
 };
 
 const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPanelProps) => {
-  const t = useTranslations('rest');
-  console.log('RequestPanel');
-
   const [openCurrentSection, setOpenCurrentSection] = useState({
     headers: false,
     body: false,

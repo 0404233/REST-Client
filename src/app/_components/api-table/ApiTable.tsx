@@ -13,8 +13,6 @@ type ApiTableProps = {
 };
 
 const ApiTable = ({ handleSubmit, handleChangeMethod, handleChangeURL }: ApiTableProps) => {
-  console.log('ApiTable');
-
   return (
     <section className="flex w-full">
       <Method setMethod={handleChangeMethod} />
