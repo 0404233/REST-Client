@@ -7,7 +7,6 @@ import { useLocale, useTranslations } from 'next-intl';
 import { redirect } from 'i18n/navigation';
 import { convertHeaders } from 'app/_lib/convertHeaders';
 import { RequestDetails, RequestHeader, RequestMethod, ResponseBody } from '@/_types/request';
-import { BASE_URL } from 'app/api/route'; 
 import { Variable } from '../variables/page';
 
 const ApiTable = lazy(() => import('@/_components/api-table/ApiTable'));
@@ -15,6 +14,7 @@ const RequestPanel = lazy(() => import('@/_components/request-panel/RequestPanel
 const GeneratedCode = lazy(() => import('@/_components/generated-code/GeneratedCode'));
 
 const LOCAL_STORAGE_KEY = 'rest-client-variables';
+export const BASE_URL = 'https://jsonplaceholder.typicode.com/posts/';
 
 function substituteVariables(str: string, variables: Variable[]): string {
   return str.replace(/{{\s*([\w\d_]+)\s*}}/g, (_, varName) => {

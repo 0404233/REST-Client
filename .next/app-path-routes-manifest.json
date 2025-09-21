@@ -1,0 +1,11 @@
+{
+  "/[locale]/history/page": "/[locale]/history",
+  "/[locale]/login/page": "/[locale]/login",
+  "/[locale]/page": "/[locale]",
+  "/[locale]/register/page": "/[locale]/register",
+  "/[locale]/rest/page": "/[locale]/rest",
+  "/[locale]/variables/page": "/[locale]/variables",
+  "/_not-found/page": "/_not-found",
+  "/api/history/route": "/api/history",
+  "/api/route": "/api"
+}

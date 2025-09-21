@@ -1,6 +1,6 @@
 'use client';
 
-import { BASE_URL } from 'app/api/route';
+import { BASE_URL } from '../../../[locale]/rest/page';
 import { ChangeEvent, useState } from 'react';
 
 type EndpointProps = {

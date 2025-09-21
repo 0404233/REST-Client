@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { adminAuth, firestore } from 'app/_lib/firebaseAdmin';
-
-export const BASE_URL = 'https://jsonplaceholder.typicode.com/posts/';
+import { BASE_URL } from '../[locale]/rest/page';
 
 interface AnalyticsData {
   userId: string;
