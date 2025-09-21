@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 
 type ButtonProps = {
   handleOpenPanel: (sectionName: string) => void;
@@ -6,7 +7,7 @@ type ButtonProps = {
 };
 
 const Button = ({ handleOpenPanel, sectionName }: ButtonProps) => {
-  console.log('Button');
+  const t = useTranslations('rest');
   return (
     <button
       onClick={() => handleOpenPanel(sectionName)}
@@ -14,7 +15,7 @@ const Button = ({ handleOpenPanel, sectionName }: ButtonProps) => {
       hover:text-gray-400 border-transparent border-1 
       focus:border-b-gray-50 transition capitalize"
     >
-      {sectionName}
+      {t(sectionName)}
     </button>
   );
 };
