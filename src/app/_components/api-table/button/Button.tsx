@@ -5,8 +5,6 @@ type ButtonProps = {
 };
 
 const Button = ({ onClick }: ButtonProps) => {
-  console.log('Button');
-
   return (
     <button
       onClick={onClick}

@@ -1,15 +1,14 @@
-import { RequestHeader, ResponseBody } from 'app/[locale]/rest/page';
 import RequestBody from '../request-body/RequestBody';
 import ResponseTable from '../response/ResponseTable';
 import { memo, useCallback, useState } from 'react';
 import Button from './button/Button';
 import HeadersTable from '../headers-table/HeadersTable';
+import { RequestHeader, ResponseBody } from '@/_types/request';
 
 type RequestPanelProps = {
   handleChangeHeaders: (headers: RequestHeader[]) => void;
   responseBody?: ResponseBody;
   setBody: (value: string) => void;
-  // setBody: (value: Record<string, string>) => void;
 };
 
 const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPanelProps) => {

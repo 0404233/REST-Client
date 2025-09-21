@@ -22,9 +22,9 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className="container flex flex-col min-h-screen mx-auto">
-        <AuthProvider>
-          <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
-        </AuthProvider>
+        <NextIntlClientProvider messages={messages}>
+          <AuthProvider>{children}</AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
