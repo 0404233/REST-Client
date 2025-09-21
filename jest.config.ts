@@ -14,6 +14,10 @@ const config: Config = {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.{ts, tsx}', '!src/**/*.d.ts'],
+  coverageReporters: ['json-summary'],
+  coverageDirectory: 'coverage',
 };
 
 export default config;
