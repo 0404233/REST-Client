@@ -3,9 +3,11 @@
 import LinkTemplate from './link-template/LinkTemplate';
 import { useAuth } from '@/context/AuthContext';
 import LoadingSkeleton from '../loading-skeleton/LoadingSkeleton';
+import { useTranslations } from 'next-intl';
 
 const AuthLinks = () => {
   const { user, loading, logout } = useAuth();
+  const t = useTranslations('auth');
 
   if (loading) {
     return <LoadingSkeleton w={6} h={6} b={2} />;
@@ -15,16 +17,16 @@ const AuthLinks = () => {
     <div className="flex gap-4 items-center">
       {!user && (
         <>
-          <LinkTemplate href={'/login'}>Sign in</LinkTemplate>
-          <LinkTemplate href={'/register'}>Sign up</LinkTemplate>
+          <LinkTemplate href="/login">{t('signIn')}</LinkTemplate>
+          <LinkTemplate href="/register">{t('signUp')}</LinkTemplate>
         </>
       )}
 
       {user && (
         <>
-          <LinkTemplate href={'/'}>Main</LinkTemplate>
-          <LinkTemplate href={'/'} onClick={logout}>
-            Sign Out
+          <LinkTemplate href="/">{t('main')}</LinkTemplate>
+          <LinkTemplate href="/" onClick={logout}>
+            {t('signOut')}
           </LinkTemplate>
         </>
       )}

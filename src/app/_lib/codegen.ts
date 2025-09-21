@@ -167,12 +167,12 @@ export function generateCodeSnippet({
       }),
       formattedBody
         ? [
-          '    conn.setDoOutput(true);',
-          '    OutputStream os = conn.getOutputStream();',
-          `    os.write("${escapeString(bodyRaw)}".getBytes());`,
-          '    os.flush();',
-          '    os.close();',
-        ].join('\n')
+            '    conn.setDoOutput(true);',
+            '    OutputStream os = conn.getOutputStream();',
+            `    os.write("${escapeString(bodyRaw)}".getBytes());`,
+            '    os.flush();',
+            '    os.close();',
+          ].join('\n')
         : '',
       '',
       '    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));',

@@ -4,30 +4,43 @@ import { baseURL } from 'app/_lib/fetch-data';
 import { generateCodeSnippet } from 'app/_lib/codegen';
 import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { redirect } from 'i18n/navigation';
 import { convertHeaders } from 'app/_lib/convertHeaders';
 import { RequestDetails, RequestHeader, RequestMethod, ResponseBody } from '@/_types/request';
+
+import { Variable } from '../variables/page';
 
 const ApiTable = lazy(() => import('@/_components/api-table/ApiTable'));
 const RequestPanel = lazy(() => import('@/_components/request-panel/RequestPanel'));
 const GeneratedCode = lazy(() => import('@/_components/generated-code/GeneratedCode'));
 
+const LOCAL_STORAGE_KEY = 'rest-client-variables';
+
+function substituteVariables(str: string, variables: Variable[]): string {
+  return str.replace(/{{\s*([\w\d_]+)\s*}}/g, (_, varName) => {
+    const found = variables.find((v) => v.name === varName);
+    return found ? found.value : '';
+  });
+}
+
 const RestClient = () => {
   const { user } = useAuth();
   const locale = useLocale();
+  const t = useTranslations();
 
   if (!user) redirect({ href: '/', locale });
 
   const [responseBody, setResponseBody] = useState<ResponseBody | undefined>();
   const [url, setURL] = useState<string>(baseURL);
   const [method, setMethod] = useState<RequestMethod>('GET');
-  const [body, setBody] = useState<string | null>(null);
+  const [body, setBody] = useState<string>('');
   const [headers, setHeaders] = useState<RequestHeader[]>([
     { id: '1', key: 'Content-Type', value: 'application/json' },
     { id: '2', key: 'Content-Type', value: 'text/plain' },
     { id: '3', key: 'Accept', value: 'application/json' },
   ]);
+  const [variables, setVariables] = useState<Variable[]>([]);
 
   useEffect(() => {
     const restoreRequest = localStorage.getItem('restoreRequest');
@@ -54,6 +67,17 @@ const RestClient = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const data = localStorage.getItem(LOCAL_STORAGE_KEY);
+        setVariables(data ? JSON.parse(data) : []);
+      } catch {
+        setVariables([]);
+      }
+    }
+  }, []);
+
   const handleSubmit = useCallback(async () => {
     try {
       const token = await user?.getIdToken();
@@ -67,8 +91,16 @@ const RestClient = () => {
         return;
       }
 
+      const substitutedURL = substituteVariables(url, variables);
+      const substitutedBody = substituteVariables(body, variables);
+      const substitutedHeaders = headers.map((h) => ({
+        ...h,
+        key: substituteVariables(h.key, variables),
+        value: substituteVariables(h.value, variables),
+      }));
+
       const requestHeaders: HeadersInit = {
-        ...convertHeaders(headers),
+        ...convertHeaders(substitutedHeaders),
         Authorization: `Bearer ${token}`,
       };
 
@@ -78,10 +110,28 @@ const RestClient = () => {
       };
 
       if (method !== 'GET' && body) {
-        fetchOptions.body = body;
+        const contentType = substitutedHeaders.find(
+          (h) => h.key.toLowerCase() === 'content-type'
+        )?.value;
+
+        if (contentType?.includes('application/json')) {
+          try {
+            JSON.parse(substitutedBody);
+            fetchOptions.body = substitutedBody;
+          } catch {
+            setResponseBody({
+              error: t('invalidJson'),
+              status: 400,
+              ok: false,
+            });
+            return;
+          }
+        } else {
+          fetchOptions.body = substitutedBody;
+        }
       }
 
-      const response = await fetch(`/api?url=${encodeURIComponent(url)}`, fetchOptions);
+      const response = await fetch(`/api?url=${encodeURIComponent(substitutedURL)}`, fetchOptions);
       const result = await response.json();
       const convertedResponse: ResponseBody = {
         status: response.status,
@@ -89,15 +139,15 @@ const RestClient = () => {
         result,
       };
       setResponseBody(convertedResponse);
-      setBody(null);
+      setBody('');
     } catch (error) {
       setResponseBody({
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : t('invalidUrl'),
         status: 500,
         ok: false,
       });
     }
-  }, [body, headers, method, url, user]);
+  }, [body, headers, method, url, variables, t, user]);
 
   const handleChangeMethod = useCallback((value: RequestMethod) => {
     setMethod(value);
@@ -119,7 +169,7 @@ const RestClient = () => {
   return (
     <div className="flex flex-col gap-4 w-full border rounded-xl p-6 bg-[var(--bg-rest)]">
       <div>
-        <h1 className="text-2xl font-bold">REST Client</h1>
+        <h1 className="text-2xl font-bold">{t('restClient')}</h1>
         {responseBody?.error && (
           <p className="text-rose-700 text-xl text-right">{responseBody.error}</p>
         )}

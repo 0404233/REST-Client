@@ -12,8 +12,6 @@ type RequestPanelProps = {
 };
 
 const RequestPanel = ({ handleChangeHeaders, responseBody, setBody }: RequestPanelProps) => {
-  console.log('RequestPanel');
-
   const [openCurrentSection, setOpenCurrentSection] = useState({
     headers: false,
     body: false,
