@@ -1,6 +1,6 @@
 'use client';
 
-import { RequestMethod } from 'app/[locale]/rest/page';
+import { RequestMethod } from '@/_types/request';
 import { ChangeEvent, memo, useState } from 'react';
 
 const MethodColors = {
