@@ -52,19 +52,6 @@ async function authenticateRequest(request: NextRequest): Promise<string | null>
   }
 }
 
-function validateUrl(url: string | null): url is string {
-  if (!url) return false;
-
-  if (url === BASE_URL) return true;
-
-  if (url.startsWith(BASE_URL)) {
-    const idPart = url.substring(BASE_URL.length);
-    return /^\d+$/.test(idPart);
-  }
-
-  return false;
-}
-
 function extractIdFromUrl(url: string): string | null {
   const idPart = url.substring(BASE_URL.length);
   return /^\d+$/.test(idPart) ? idPart : null;
@@ -92,7 +79,7 @@ async function handleApiRequest(
 
     const url = request.nextUrl.searchParams.get('url');
 
-    if (!url || !validateUrl(url)) {
+    if (!url) {
       return Response.json({ error: 'Invalid URL format' }, { status: 400 });
     }
 
