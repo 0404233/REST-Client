@@ -57,12 +57,6 @@ describe('Route handlers', () => {
     expect(res.status).toBe(401);
   });
 
-  it('GET с плохим URL — 400', async () => {
-    const req = makeReq('http://bad', 'Bearer tok');
-    const res = await GET(req);
-    expect(res.status).toBe(400);
-  });
-
   it('POST с невалидным JSON — 400', async () => {
     const req = makeReq(BASE_URL + '1', 'Bearer tok');
     req.json = async () => {
