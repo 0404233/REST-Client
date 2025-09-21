@@ -22,7 +22,7 @@ const LanguageSwitcher = () => {
         <ImageTemplate src="/usa.png" lang="en" activeLang={currentLocale} setLang={() => {}} />
       </button>
       <button onClick={() => handleSwitch('ru')}>
-        <ImageTemplate src="/germany.png" lang="ru" activeLang={currentLocale} setLang={() => {}} />
+        <ImageTemplate src="/russia.png" lang="ru" activeLang={currentLocale} setLang={() => {}} />
       </button>
     </div>
   );
