@@ -1,0 +1,3 @@
+module.exports=[54644,a=>{"use strict";a.s(["default",()=>c]);var b=a.i(7997);let c=({w:a,h:c,b:d})=>(0,b.jsx)("section",{className:"container flex flex-col items-center flex-grow justify-center",children:(0,b.jsx)("div",{className:`animate-spin rounded-full h-${c} w-${a} border-b-${d} border-rose-400`})})},2747,a=>{"use strict";a.s(["default",()=>d]);var b=a.i(7997),c=a.i(54644);let d=()=>(0,b.jsx)(c.default,{w:24,h:24,b:6})}];
+
+//# sourceMappingURL=src_app_66bda16b._.js.map

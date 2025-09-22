@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --bg-rest: #5d67a940;
+  --border-url-focus: #35eeb6;
+  --bg-select: #5d67a940;
+  --border-url: #f5f5f5;
+  --border-b: #f5f5f5;
+  --text-color: #f5f5f5;
+  --text-color-hover: #f5f5f570;
+  --bg-image:
+    repeating-radial-gradient(circle at 0 0, transparent 0, #777781 10px),
+    repeating-linear-gradient(#00000055, #000000);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --bg-rest: #5d67a940;
+    --bg-select: #5d67a940;
+    --border-url: #f5f5f5;
+    --border-b: #f5f5f5;
+    --text-color: #f5f5f5;
+    --text-color-hover: #f5f5f570;
+    --bg-image:
+      repeating-radial-gradient(circle at 0 0, transparent 0, #777781 10px),
+      repeating-linear-gradient(#00000055, #000000);
+  }
+}
+
+body {
+  background: var(--color);
+  background-image: var(--bg-image);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.json-container pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}

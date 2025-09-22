@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FormButton Component > Snapshot Tests > matches snapshot when disabled 1`] = `
+<button
+  class="px-2 py-1.5 border-2 text-white 
+               border-gray-600 rounded-md cursor-pointer 
+               bg-blue-500 disabled:opacity-75 
+               disabled:bg-gray-500
+               disabled:cursor-not-allowed"
+  disabled=""
+>
+  Submit
+</button>
+`;
+
+exports[`FormButton Component > Snapshot Tests > matches snapshot when enabled 1`] = `
+<button
+  class="px-2 py-1.5 border-2 text-white 
+               border-gray-600 rounded-md cursor-pointer 
+               bg-blue-500 disabled:opacity-75 
+               disabled:bg-gray-500
+               disabled:cursor-not-allowed"
+>
+  Submit
+</button>
+`;

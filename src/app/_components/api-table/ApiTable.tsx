@@ -1,0 +1,25 @@
+'use client';
+
+import { RequestMethod } from '@/_types/request';
+import Button from './button/Button';
+import Endpoint from './endpoint/Endpoint';
+import Method from './method/Method';
+import { memo } from 'react';
+
+type ApiTableProps = {
+  handleSubmit: () => void;
+  handleChangeMethod: (value: RequestMethod) => void;
+  handleChangeURL: (value: string) => void;
+};
+
+const ApiTable = ({ handleSubmit, handleChangeMethod, handleChangeURL }: ApiTableProps) => {
+  return (
+    <section className="flex w-full">
+      <Method setMethod={handleChangeMethod} />
+      <Endpoint handleChangeURL={handleChangeURL} />
+      <Button onClick={handleSubmit} />
+    </section>
+  );
+};
+
+export default memo(ApiTable);
